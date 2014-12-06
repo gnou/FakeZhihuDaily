@@ -7,17 +7,78 @@
 //
 
 #import "AppDelegate.h"
+#import "AppDelegate+MOC.h"
+#import "StorysDatabaseAvailability.h"
+#import "Story+Create.h"
 
-@interface AppDelegate ()
-
+@interface AppDelegate () <NSURLSessionDownloadDelegate>
+@property (nonatomic, strong) NSURLSession *downloadStorysSession;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    self.managedObjectContext = [self createMainQueueManagedObjectContext];
+    
+    [self initAppearence];
+    
+    [self startFetch];
+    
     return YES;
+}
+
+- (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    _managedObjectContext = managedObjectContext;
+    NSDictionary *userInfo = managedObjectContext ? @{StorysDatabaseAvailabilityContext:managedObjectContext} : nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:StorysDatabaseAvailabilityNotification object:self userInfo:userInfo];
+}
+
+- (void)initAppearence {
+    UIColor *myTintColor = [UIColor colorWithRed:76/255.0f green:211/255.0f blue:235/255.0f alpha:1.0f];
+    
+    [[UITabBar appearance] setTintColor:myTintColor];
+    
+    [[UINavigationBar appearance] setBarStyle:UIBarStyleDefault];
+    [[UINavigationBar appearance] setBarTintColor:myTintColor];
+    
+    [[UIToolbar appearance] setBarStyle:UIBarStyleDefault];
+    [[UIToolbar appearance] setBarTintColor:myTintColor];
+}
+
+- (void)startFetch {
+    [self.downloadStorysSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
+        if (![downloadTasks count]) {
+            NSURLSessionDownloadTask *task = [self.downloadStorysSession downloadTaskWithURL:[NSURL URLWithString:@"http://news-at.zhihu.com/api/3/news/latest"]];
+            [task resume];
+        } else {
+            for (NSURLSessionDownloadTask *task in downloadTasks) {
+                [task resume];
+            }
+        }
+    }];
+}
+
+- (NSURLSession *)downloadStorysSession {
+    if (!_downloadStorysSession) {
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"Fetch Storys"];
+        _downloadStorysSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+    }
+    return _downloadStorysSession;
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+    NSData *storyData = [NSData dataWithContentsOfURL:location];
+    NSError *jsonError;
+    NSDictionary *storyDictionary = [NSJSONSerialization JSONObjectWithData:storyData options:NSJSONReadingAllowFragments error:&jsonError];
+    if (!jsonError) {
+        NSArray *storiesArray = storyDictionary[@"stories"];
+        [self.managedObjectContext performBlock:^{
+            [Story loadStorysFromArray:storiesArray intoManagedObjectContext:self.managedObjectContext];
+            [self.managedObjectContext save:NULL];
+        }];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
