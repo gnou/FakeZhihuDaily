@@ -11,8 +11,10 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface BodyViewController () <UIWebViewDelegate>
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIView *alphaLayer;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *imageSourceLabel;
 @property (nonatomic, strong) NSURL *url;
@@ -42,14 +44,18 @@
     self.webView.delegate = self;
     
     self.navigationController.navigationBarHidden = YES;
+    [self.navigationController.interactivePopGestureRecognizer setDelegate:nil];
 
-    [[[[RACObserve(self, url) ignore:nil] flattenMap:^RACStream *(NSURL *url) {
+    [[[[[RACObserve(self, url) ignore:nil] flattenMap:^RACStream *(NSURL *url) {
         return [self fetchBodyForURL:url];
-    }] map:^id(NSDictionary *dict) {
+    }] deliverOn:[RACScheduler mainThreadScheduler]]
+       map:^id(NSDictionary *dict) {
         NSString *imageURLString = dict[@"image"];
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]];
-        self.titleLabel.text = dict[@"title"];
-        self.imageSourceLabel.text = dict[@"image_source"];
+        NSString *title = dict[@"title"];
+        self.titleLabel.text = title;
+        NSString *imageSource = dict[@"image_source"];
+        self.imageSourceLabel.text = imageSource;
         return [self generateWebPageFromDictionary:dict];
     }] subscribeNext:^(NSString *htmlString) {
         [self.webView loadHTMLString:htmlString baseURL:nil];
@@ -81,29 +87,29 @@
     }];
 }
 
-- (RACSignal *)fetchCSSFromURL:(NSURL *)url {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            if (error) {
-                [subscriber sendError:error];
-            } else {
-                NSString *css = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                [subscriber sendNext:css];
-            }
-        }];
-        [dataTask resume];
-        
-        return [RACDisposable disposableWithBlock:^{
-            [dataTask cancel];
-        }];
-    }];
-}
+//- (RACSignal *)fetchCSSFromURL:(NSURL *)url {
+//    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//        NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//            if (error) {
+//                [subscriber sendError:error];
+//            } else {
+//                NSString *css = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                [subscriber sendNext:css];
+//            }
+//        }];
+//        [dataTask resume];
+//        
+//        return [RACDisposable disposableWithBlock:^{
+//            [dataTask cancel];
+//        }];
+//    }];
+//}
 
 - (NSString *)generateWebPageFromDictionary:(NSDictionary *)dictionary {
     NSString *htmlBodyString = dictionary[@"body"];
     NSString *cssURLString = dictionary[@"css"][0];
     NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=%@ /></head><body>%@</body></html>", cssURLString, htmlBodyString];
-    NSLog(@"%@", htmlString);
+    //NSLog(@"%@", htmlString);
     //NSString *htmlString = [NSString stringWithFormat:@"<html><head></head><body>%@</body></html>",dictionary[@"body"]];
     return htmlString;
 }

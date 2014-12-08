@@ -22,6 +22,10 @@
     }];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = NO;
+}
+
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     _managedObjectContext = managedObjectContext;
     
@@ -46,7 +50,15 @@
 - (void)configureCell:(TitleCell *)cell atIndexPath:(NSIndexPath *)indexPath  {
     Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.titleLabel.text = story.title;
-    [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:story.imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    NSString *imageURL = story.imageURL;
+    if (!imageURL) {
+        NSLog(@"No image");
+        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:cell.titleImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:0.0f];
+        [cell addConstraint:constraint];
+    } else {
+        [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:story.imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    }
+    
 }
 
 - (IBAction)refreshStories:(id)sender {
