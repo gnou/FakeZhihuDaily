@@ -8,9 +8,10 @@
 
 #import "BodyViewController.h"
 #import <ReactiveCocoa.h>
+#import <ReactiveCocoa/RACEXTScope.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
-@interface BodyViewController () <UIWebViewDelegate>
+@interface BodyViewController () <UIWebViewDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
@@ -46,32 +47,47 @@
     [self.indicatorView startAnimating];
     
     self.webView.delegate = self;
+    self.webView.scrollView.scrollEnabled = NO;
+    self.webView.scrollView.delegate = self;
+    self.webView.scrollView.bounces = NO;
+    self.webView.scrollView.showsVerticalScrollIndicator = NO;
+    
+    self.scrollView.delegate = self;
     
     //self.navigationController.navigationBarHidden = YES;
     
     [self.navigationController.interactivePopGestureRecognizer setDelegate:nil];
     
     self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.alphaLayer.backgroundColor = [UIColor whiteColor];
     
-    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
-    [self.view addConstraint:leftConstraint];
-    
-    NSLayoutConstraint *rightConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
-    [self.view addConstraint:rightConstrain];
-    
-    NSLayoutConstraint *topConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
-    [self.view addConstraint:topConstrain];
-    
-    NSLayoutConstraint *bottomConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:220.0f];
-    [self.view addConstraint:bottomConstrain];
+//    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
+//    [self.view addConstraint:leftConstraint];
+//    
+//    NSLayoutConstraint *rightConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
+//    [self.view addConstraint:rightConstrain];
+//    
+//    NSLayoutConstraint *topConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
+//    [self.view addConstraint:topConstrain];
+//    
+//    NSLayoutConstraint *bottomConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:220.0f];
+//    [self.view addConstraint:bottomConstrain];
     //[self.view addConstraints:@[leftConstraint, rightConstrain, topConstrain]];
+    NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:widthConstraint];
+    
+    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1.0f constant:220.0f];
+    [self.view addConstraint:heightConstraint];
 
+    @weakify(self)
     [[[[[RACObserve(self, url) ignore:nil] flattenMap:^RACStream *(NSURL *url) {
+        @strongify(self)
         return [self fetchBodyForURL:url];
     }] deliverOn:[RACScheduler mainThreadScheduler]]
        map:^id(NSDictionary *dict) {
+           @strongify(self)
         [self.indicatorView stopAnimating];
         NSString *imageURLString = dict[@"image"];
            if (imageURLString) {
@@ -90,8 +106,11 @@
         
         return [self generateWebPageFromDictionary:dict];
     }] subscribeNext:^(NSString *htmlString) {
+        @strongify(self)
         [self.webView loadHTMLString:htmlString baseURL:nil];
-        self.scrollView.contentSize = self.contentView.frame.size;
+        //NSLayoutConstraint *heightOfContentViewConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.webView attribute:NSLayoutAttributeHeight multiplier:1.0f constant:20.0f];
+        //[self.view addConstraint:heightOfContentViewConstraint];
+        //self.scrollView.contentSize = self.contentView.frame.size;
     } error:^(NSError *error) {
         //Handle Error
     }];
@@ -120,31 +139,22 @@
     }];
 }
 
-//- (RACSignal *)fetchCSSFromURL:(NSURL *)url {
-//    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-//        NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//            if (error) {
-//                [subscriber sendError:error];
-//            } else {
-//                NSString *css = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                [subscriber sendNext:css];
-//            }
-//        }];
-//        [dataTask resume];
-//        
-//        return [RACDisposable disposableWithBlock:^{
-//            [dataTask cancel];
-//        }];
-//    }];
-//}
-
 - (NSString *)generateWebPageFromDictionary:(NSDictionary *)dictionary {
     NSString *htmlBodyString = dictionary[@"body"];
     NSString *cssURLString = dictionary[@"css"][0];
     NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=%@ /></head><body>%@</body></html>", cssURLString, htmlBodyString];
-    //NSLog(@"%@", htmlString);
-    //NSString *htmlString = [NSString stringWithFormat:@"<html><head></head><body>%@</body></html>",dictionary[@"body"]];
     return htmlString;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (![scrollView.superview isKindOfClass:[UIWebView class]]) {
+        if (scrollView.contentOffset.y < 220) {
+            self.webView.scrollView.scrollEnabled = NO;
+        } else {
+            self.webView.scrollView.scrollEnabled = YES;
+        }
+    }
 }
 
 @end
