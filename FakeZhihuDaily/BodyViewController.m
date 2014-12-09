@@ -11,12 +11,14 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface BodyViewController () <UIWebViewDelegate>
+@property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIView *alphaLayer;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *imageSourceLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicatorView;
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, strong) NSURLSession *session;
 @end
@@ -41,24 +43,55 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.indicatorView startAnimating];
+    
     self.webView.delegate = self;
     
-    self.navigationController.navigationBarHidden = YES;
+    //self.navigationController.navigationBarHidden = YES;
+    
     [self.navigationController.interactivePopGestureRecognizer setDelegate:nil];
+    
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.alphaLayer.backgroundColor = [UIColor whiteColor];
+    
+    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:leftConstraint];
+    
+    NSLayoutConstraint *rightConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:rightConstrain];
+    
+    NSLayoutConstraint *topConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:topConstrain];
+    
+    NSLayoutConstraint *bottomConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:220.0f];
+    [self.view addConstraint:bottomConstrain];
+    //[self.view addConstraints:@[leftConstraint, rightConstrain, topConstrain]];
 
     [[[[[RACObserve(self, url) ignore:nil] flattenMap:^RACStream *(NSURL *url) {
         return [self fetchBodyForURL:url];
     }] deliverOn:[RACScheduler mainThreadScheduler]]
        map:^id(NSDictionary *dict) {
+        [self.indicatorView stopAnimating];
         NSString *imageURLString = dict[@"image"];
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]];
-        NSString *title = dict[@"title"];
-        self.titleLabel.text = title;
-        NSString *imageSource = dict[@"image_source"];
-        self.imageSourceLabel.text = imageSource;
+           if (imageURLString) {
+               [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]];
+               self.alphaLayer.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2f];
+               NSString *title = dict[@"title"];
+               self.titleLabel.text = title;
+               NSString *imageSource = dict[@"image_source"];
+               self.imageSourceLabel.text = imageSource;
+           } else {
+               [self.imageView removeFromSuperview];
+               [self.alphaLayer removeFromSuperview];
+               [self.titleLabel removeFromSuperview];
+               [self.imageSourceLabel removeFromSuperview];
+           }
+        
         return [self generateWebPageFromDictionary:dict];
     }] subscribeNext:^(NSString *htmlString) {
         [self.webView loadHTMLString:htmlString baseURL:nil];
+        self.scrollView.contentSize = self.contentView.frame.size;
     } error:^(NSError *error) {
         //Handle Error
     }];

@@ -1,5 +1,5 @@
 #include "Pods-TSMessages.xcconfig"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Build" "${PODS_ROOT}/Headers/Build/TSMessages" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/HexColors" "${PODS_ROOT}/Headers/Public/LBBlurredImage" "${PODS_ROOT}/Headers/Public/Mantle" "${PODS_ROOT}/Headers/Public/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/ReactiveCocoa/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/TSMessages"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Build" "${PODS_ROOT}/Headers/Build/TSMessages" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/HexColors" "${PODS_ROOT}/Headers/Public/Mantle" "${PODS_ROOT}/Headers/Public/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/ReactiveCocoa/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/TSMessages"
 OTHER_LDFLAGS = -ObjC
 PODS_ROOT = ${SRCROOT}

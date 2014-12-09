@@ -12,12 +12,6 @@
 #define COCOAPODS_VERSION_MINOR_HexColors 2
 #define COCOAPODS_VERSION_PATCH_HexColors 1
 
-// LBBlurredImage
-#define COCOAPODS_POD_AVAILABLE_LBBlurredImage
-#define COCOAPODS_VERSION_MAJOR_LBBlurredImage 0
-#define COCOAPODS_VERSION_MINOR_LBBlurredImage 2
-#define COCOAPODS_VERSION_PATCH_LBBlurredImage 0
-
 // Mantle
 #define COCOAPODS_POD_AVAILABLE_Mantle
 #define COCOAPODS_VERSION_MAJOR_Mantle 1

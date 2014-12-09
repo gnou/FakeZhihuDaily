@@ -1,6 +1,5 @@
 PODS:
   - HexColors (2.2.1)
-  - LBBlurredImage (0.2.0)
   - Mantle (1.5.1):
     - Mantle/extobjc (= 1.5.1)
   - Mantle/extobjc (1.5.1)
@@ -18,7 +17,6 @@ PODS:
     - HexColors
 
 DEPENDENCIES:
-  - LBBlurredImage
   - Mantle
   - ReactiveCocoa
   - SDWebImage
@@ -26,7 +24,6 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   HexColors: 01384d2bbe8dc4ffa43c3b4135db6e976952d153
-  LBBlurredImage: 30cc42be977bbcece286d26d2d9c08b8be7f05e8
   Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
   ReactiveCocoa: dca75777b9d18990c8714a3a6f2149f29b4d1462
   SDWebImage: 116e88633b5b416ea0ca4b334a4ac59cf72dd38d
