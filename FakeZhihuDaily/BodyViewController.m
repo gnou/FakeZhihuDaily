@@ -62,19 +62,7 @@
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.alphaLayer.backgroundColor = [UIColor whiteColor];
-    
-//    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
-//    [self.view addConstraint:leftConstraint];
-//    
-//    NSLayoutConstraint *rightConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
-//    [self.view addConstraint:rightConstrain];
-//    
-//    NSLayoutConstraint *topConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
-//    [self.view addConstraint:topConstrain];
-//    
-//    NSLayoutConstraint *bottomConstrain = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:220.0f];
-//    [self.view addConstraint:bottomConstrain];
-    //[self.view addConstraints:@[leftConstraint, rightConstrain, topConstrain]];
+
     NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f];
     [self.view addConstraint:widthConstraint];
     
@@ -91,6 +79,7 @@
         [self.indicatorView stopAnimating];
         NSString *imageURLString = dict[@"image"];
            if (imageURLString) {
+               
                [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]];
                self.alphaLayer.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2f];
                NSString *title = dict[@"title"];

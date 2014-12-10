@@ -38,7 +38,6 @@
         story.imageURL = storyDictionary[@"images"][0];
         story.shareURL = storyDictionary[@"share_url"];
     }
-    NSLog(@"got a new story");
     return story;
 }
 

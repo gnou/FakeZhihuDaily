@@ -64,7 +64,6 @@
     } else {
         [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:story.imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
     }
-    
 }
 
 - (IBAction)refreshStories:(id)sender {
