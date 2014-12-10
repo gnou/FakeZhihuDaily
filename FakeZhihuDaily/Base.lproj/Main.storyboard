@@ -9,7 +9,7 @@
         <scene sceneID="mAA-ht-JGK">
             <objects>
                 <tableViewController storyboardIdentifier="Home View" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lcG-3P-fQj" customClass="StoryCDTVC" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="85" sectionHeaderHeight="22" sectionFooterHeight="22" id="lSp-Fp-c54">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="lSp-Fp-c54">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -55,6 +55,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Today" id="62l-nR-AtW"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedTopBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zv5-0R-uHm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

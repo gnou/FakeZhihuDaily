@@ -12,6 +12,9 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+- (UIColor *)tintColor;
 - (void)startFetch;
+- (NSString *)dateStringOfToday;
+- (void)fetchStoriesOfDate:(NSString *)dateString;
 @end
 

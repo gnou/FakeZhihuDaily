@@ -6,6 +6,7 @@
 //
 
 #import "CoreDataTableViewController.h"
+#import "AppDelegate.h"
 
 @implementation CoreDataTableViewController
 
@@ -68,20 +69,26 @@
     return rows;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	return [[[self.fetchedResultsController sections] objectAtIndex:section] name];
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//	NSString *titleString = [[[self.fetchedResultsController sections] objectAtIndex:section] name];
+//    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+//    if ([titleString isEqualToString:[appDelegate dateStringOfToday]]) {
+//        titleString = @"今日热门";
+//    }
+//    return titleString;
+//}
 
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
-{
-	return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
-}
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
-{
-    return [self.fetchedResultsController sectionIndexTitles];
-}
+//- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+//{
+//	return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
+//}
+
+//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+//{
+//    return [self.fetchedResultsController sectionIndexTitles];
+//}
 
 #pragma mark - NSFetchedResultsControllerDelegate
 

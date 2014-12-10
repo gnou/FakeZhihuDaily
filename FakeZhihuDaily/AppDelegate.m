@@ -19,14 +19,20 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
     self.managedObjectContext = [self createMainQueueManagedObjectContext];
     
     [self initAppearence];
     
     [self startFetch];
-    
+        
     return YES;
+}
+
+- (NSString *)dateStringOfToday {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyMMdd"];
+    return [dateFormatter stringFromDate:[NSDate date]];
 }
 
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -35,8 +41,12 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:StorysDatabaseAvailabilityNotification object:self userInfo:userInfo];
 }
 
+- (UIColor *)tintColor {
+    return [UIColor colorWithRed:76/255.0f green:211/255.0f blue:235/255.0f alpha:1.0f];
+}
 - (void)initAppearence {
-    UIColor *myTintColor = [UIColor colorWithRed:76/255.0f green:211/255.0f blue:235/255.0f alpha:1.0f];
+    
+    UIColor *myTintColor = [self tintColor];
     
     [[UITabBar appearance] setTintColor:myTintColor];
     
@@ -48,9 +58,23 @@
 }
 
 - (void)startFetch {
+    [self fetchStoriesOfDate:@"today"];
+}
+
+- (void)fetchStoriesOfDate:(NSString *)dateString {
+    NSString *urlString;
+    if ([dateString isEqualToString:@"today"]) {
+        urlString = @"http://news-at.zhihu.com/api/3/news/latest";
+    } else if ([self isValidDateString:dateString]) {
+        urlString = [NSString stringWithFormat:@"http://news.at.zhihu.com/api/3/news/before/%@", dateString];
+    } else {
+        // Handle error
+        NSLog(@"dateString error");
+    }
+    
     [self.downloadStorysSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         if (![downloadTasks count]) {
-            NSURLSessionDownloadTask *task = [self.downloadStorysSession downloadTaskWithURL:[NSURL URLWithString:@"http://news-at.zhihu.com/api/3/news/latest"]];
+            NSURLSessionDownloadTask *task = [self.downloadStorysSession downloadTaskWithURL:[NSURL URLWithString:urlString]];
             [task resume];
         } else {
             for (NSURLSessionDownloadTask *task in downloadTasks) {
@@ -58,6 +82,10 @@
             }
         }
     }];
+}
+
+- (BOOL)isValidDateString:(NSString *)dateString {
+    return dateString.integerValue > 20130520 && dateString.integerValue <= [self dateStringOfToday].integerValue;
 }
 
 - (NSURLSession *)downloadStorysSession {
@@ -73,9 +101,10 @@
     NSError *jsonError;
     NSDictionary *storyDictionary = [NSJSONSerialization JSONObjectWithData:storyData options:NSJSONReadingAllowFragments error:&jsonError];
     if (!jsonError) {
+        NSString *dateString = storyDictionary[@"date"];
         NSArray *storiesArray = storyDictionary[@"stories"];
         [self.managedObjectContext performBlock:^{
-            [Story loadStorysFromArray:storiesArray intoManagedObjectContext:self.managedObjectContext];
+            [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:self.managedObjectContext];
             [self.managedObjectContext save:NULL];
         }];
     }

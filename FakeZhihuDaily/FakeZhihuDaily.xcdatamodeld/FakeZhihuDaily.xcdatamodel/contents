@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Date" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+    <entity name="Date" representedClassName="Date" syncable="YES">
+        <attribute name="dateString" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Story" inverseName="date" inverseEntity="Story" syncable="YES"/>
     </entity>
     <entity name="Story" representedClassName="Story" syncable="YES">
@@ -14,7 +14,7 @@
         <relationship name="date" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Date" inverseName="stories" inverseEntity="Date" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Story" positionX="-54" positionY="-9" width="128" height="148"/>
         <element name="Date" positionX="133" positionY="27" width="128" height="73"/>
+        <element name="Story" positionX="-54" positionY="-9" width="128" height="148"/>
     </elements>
 </model>

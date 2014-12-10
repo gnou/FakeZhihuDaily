@@ -7,10 +7,11 @@
 //
 
 #import "Story+Create.h"
+#import "Date+Create.h"
 
 @implementation Story (Create)
 
-+ (Story *)storyWithStoryInfo:(NSDictionary *)storyDictionary inManagedObjectContext:(NSManagedObjectContext *)context {
++ (Story *)storyWithStoryInfo:(NSDictionary *)storyDictionary withDateString:(NSString *)dateString inManagedObjectContext:(NSManagedObjectContext *)context {
     Story *story = nil;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -37,13 +38,14 @@
         story.gaPrefix = storyDictionary[@"ga_prefix"];
         story.imageURL = storyDictionary[@"images"][0];
         story.shareURL = storyDictionary[@"share_url"];
+        story.date = [Date dateWithDateString:dateString inManagedObjectContext:context];
     }
     return story;
 }
 
-+ (void)loadStorysFromArray:(NSArray *)storyArray intoManagedObjectContext:(NSManagedObjectContext *)context {
++ (void)loadStorysFromArray:(NSArray *)storyArray withDateString:(NSString *)dateString intoManagedObjectContext:(NSManagedObjectContext *)context {
     for (NSDictionary *story in storyArray) {
-        [self storyWithStoryInfo:story inManagedObjectContext:context];
+        [self storyWithStoryInfo:story withDateString:(NSString *)dateString inManagedObjectContext:context];
     }
 }
 

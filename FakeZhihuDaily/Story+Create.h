@@ -9,6 +9,6 @@
 #import "Story.h"
 
 @interface Story (Create)
-+ (Story *)storyWithStoryInfo:(NSDictionary *)storyDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
-+ (void)loadStorysFromArray:(NSArray *)storyArray intoManagedObjectContext:(NSManagedObjectContext *)context;
++ (Story *)storyWithStoryInfo:(NSDictionary *)storyDictionary withDateString:(NSString *)dateString inManagedObjectContext:(NSManagedObjectContext *)context;
++ (void)loadStorysFromArray:(NSArray *)storyArray withDateString:(NSString *)dateString intoManagedObjectContext:(NSManagedObjectContext *)context;
 @end

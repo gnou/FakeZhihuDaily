@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4D81A32EED6008A8555 /* AppDelegate+MOC.m */; };
 		4C87F4DD1A32F131008A8555 /* Story+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4DC1A32F131008A8555 /* Story+Create.m */; };
-		4C87F4E01A32F2D4008A8555 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4DF1A32F2D4008A8555 /* Story.m */; };
 		4C87F4E31A32FE2A008A8555 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */; };
 		4C87F4E61A32FE64008A8555 /* StoryCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */; };
 		4C87F4E91A3306D0008A8555 /* BodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E81A3306D0008A8555 /* BodyViewController.m */; };
@@ -21,6 +20,9 @@
 		4CF2D7021A2874590080B019 /* FakeZhihuDailyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D7011A2874590080B019 /* FakeZhihuDailyTests.m */; };
 		4CF2D7101A2875310080B019 /* TitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D70E1A2875310080B019 /* TitleCell.m */; };
 		4CF2D71F1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D71D1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld */; };
+		4CF59B651A37EB3400475CB7 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF59B641A37EB3400475CB7 /* Story.m */; };
+		4CF59B681A37EC3200475CB7 /* Date+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF59B671A37EC3200475CB7 /* Date+Create.m */; };
+		4CF59B6B1A37ED3100475CB7 /* Date.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF59B6A1A37ED3100475CB7 /* Date.m */; };
 		6C3745A04615A235CADC83F5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 277424DF40C7D10B7787200B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -44,8 +46,6 @@
 		4C87F4DA1A32F00F008A8555 /* StorysDatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorysDatabaseAvailability.h; sourceTree = "<group>"; };
 		4C87F4DB1A32F131008A8555 /* Story+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Story+Create.h"; sourceTree = "<group>"; };
 		4C87F4DC1A32F131008A8555 /* Story+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Story+Create.m"; sourceTree = "<group>"; };
-		4C87F4DE1A32F2D4008A8555 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
-		4C87F4DF1A32F2D4008A8555 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
 		4C87F4E11A32FE2A008A8555 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 		4C87F4E41A32FE64008A8555 /* StoryCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCDTVC.h; sourceTree = "<group>"; };
@@ -66,6 +66,12 @@
 		4CF2D70D1A2875310080B019 /* TitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TitleCell.h; path = "../../Fake Zhihu Daily/Fake Zhihu Daily/TitleCell.h"; sourceTree = "<group>"; };
 		4CF2D70E1A2875310080B019 /* TitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TitleCell.m; path = "../../Fake Zhihu Daily/Fake Zhihu Daily/TitleCell.m"; sourceTree = "<group>"; };
 		4CF2D71E1A288B610080B019 /* FakeZhihuDaily.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FakeZhihuDaily.xcdatamodel; sourceTree = "<group>"; };
+		4CF59B631A37EB3400475CB7 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
+		4CF59B641A37EB3400475CB7 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
+		4CF59B661A37EC3200475CB7 /* Date+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Date+Create.h"; sourceTree = "<group>"; };
+		4CF59B671A37EC3200475CB7 /* Date+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Date+Create.m"; sourceTree = "<group>"; };
+		4CF59B691A37ED3100475CB7 /* Date.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Date.h; sourceTree = "<group>"; };
+		4CF59B6A1A37ED3100475CB7 /* Date.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Date.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,10 +126,14 @@
 			isa = PBXGroup;
 			children = (
 				4CF2D71D1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld */,
-				4C87F4DE1A32F2D4008A8555 /* Story.h */,
-				4C87F4DF1A32F2D4008A8555 /* Story.m */,
+				4CF59B631A37EB3400475CB7 /* Story.h */,
+				4CF59B641A37EB3400475CB7 /* Story.m */,
 				4C87F4DB1A32F131008A8555 /* Story+Create.h */,
 				4C87F4DC1A32F131008A8555 /* Story+Create.m */,
+				4CF59B691A37ED3100475CB7 /* Date.h */,
+				4CF59B6A1A37ED3100475CB7 /* Date.m */,
+				4CF59B661A37EC3200475CB7 /* Date+Create.h */,
+				4CF59B671A37EC3200475CB7 /* Date+Create.m */,
 				4C87F4DA1A32F00F008A8555 /* StorysDatabaseAvailability.h */,
 				4CF2D6E91A2874590080B019 /* AppDelegate.h */,
 				4CF2D6EA1A2874590080B019 /* AppDelegate.m */,
@@ -132,12 +142,12 @@
 				4CF2D70D1A2875310080B019 /* TitleCell.h */,
 				4CF2D70E1A2875310080B019 /* TitleCell.m */,
 				4CF2D6EF1A2874590080B019 /* Main.storyboard */,
-				4C87F4E71A3306D0008A8555 /* BodyViewController.h */,
-				4C87F4E81A3306D0008A8555 /* BodyViewController.m */,
 				4C87F4E41A32FE64008A8555 /* StoryCDTVC.h */,
 				4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */,
 				4C87F4E11A32FE2A008A8555 /* CoreDataTableViewController.h */,
 				4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */,
+				4C87F4E71A3306D0008A8555 /* BodyViewController.h */,
+				4C87F4E81A3306D0008A8555 /* BodyViewController.m */,
 				4CF2D6F21A2874590080B019 /* Images.xcassets */,
 				4CF2D6F41A2874590080B019 /* LaunchScreen.xib */,
 				4CF2D6E51A2874590080B019 /* Supporting Files */,
@@ -316,11 +326,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */,
+				4CF59B681A37EC3200475CB7 /* Date+Create.m in Sources */,
 				4C87F4E31A32FE2A008A8555 /* CoreDataTableViewController.m in Sources */,
 				4C87F4E61A32FE64008A8555 /* StoryCDTVC.m in Sources */,
-				4C87F4E01A32F2D4008A8555 /* Story.m in Sources */,
 				4CF2D7101A2875310080B019 /* TitleCell.m in Sources */,
 				4CF2D6EB1A2874590080B019 /* AppDelegate.m in Sources */,
+				4CF59B651A37EB3400475CB7 /* Story.m in Sources */,
+				4CF59B6B1A37ED3100475CB7 /* Date.m in Sources */,
 				4CF2D71F1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld in Sources */,
 				4CF2D6E81A2874590080B019 /* main.m in Sources */,
 				4C87F4E91A3306D0008A8555 /* BodyViewController.m in Sources */,
