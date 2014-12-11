@@ -19,11 +19,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@interface CoreDataTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface CoreDataTableViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 // The controller (this class fetches nothing if this is not set).
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-
+@property (strong, nonatomic) UITableView *tableView;
 // Causes the fetchedResultsController to refetch the data.
 // You almost certainly never need to call this.
 // The NSFetchedResultsController class observes the context

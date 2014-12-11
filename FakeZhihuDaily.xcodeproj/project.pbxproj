@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C2144071A39A72200757A36 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C2144061A39A72200757A36 /* Localizable.strings */; };
 		4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4D81A32EED6008A8555 /* AppDelegate+MOC.m */; };
 		4C87F4DD1A32F131008A8555 /* Story+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4DC1A32F131008A8555 /* Story+Create.m */; };
 		4C87F4E31A32FE2A008A8555 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */; };
@@ -41,6 +42,7 @@
 		277424DF40C7D10B7787200B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BBB8199B14BBE8D0114A5B4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4C1660801A304CFE00D33092 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4C2144061A39A72200757A36 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		4C87F4D71A32EED6008A8555 /* AppDelegate+MOC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+MOC.h"; sourceTree = "<group>"; };
 		4C87F4D81A32EED6008A8555 /* AppDelegate+MOC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+MOC.m"; sourceTree = "<group>"; };
 		4C87F4DA1A32F00F008A8555 /* StorysDatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorysDatabaseAvailability.h; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				4CF2D6E61A2874590080B019 /* Info.plist */,
+				4C2144061A39A72200757A36 /* Localizable.strings */,
 				4CF2D6E71A2874590080B019 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -273,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF2D6F11A2874590080B019 /* Main.storyboard in Resources */,
+				4C2144071A39A72200757A36 /* Localizable.strings in Resources */,
 				4CF2D6F61A2874590080B019 /* LaunchScreen.xib in Resources */,
 				4CF2D6F31A2874590080B019 /* Images.xcassets in Resources */,
 			);

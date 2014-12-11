@@ -36,11 +36,11 @@
     if (newfrc != oldfrc) {
         _fetchedResultsController = newfrc;
         newfrc.delegate = self;
-        if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) && (!self.navigationController || !self.navigationItem.title)) {
-            self.title = [[NSBundle mainBundle] localizedStringForKey:newfrc.fetchRequest.entity.name
-                                                                value:newfrc.fetchRequest.entity.name
-                                                                table:@"Entities"];
-        }
+//        if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) && (!self.navigationController || !self.navigationItem.title)) {
+//            self.title = [[NSBundle mainBundle] localizedStringForKey:newfrc.fetchRequest.entity.name
+//                                                                value:newfrc.fetchRequest.entity.name
+//                                                                table:@"Entities"];
+//        }
         if (newfrc) {
             if (self.debug) NSLog(@"[%@ %@] %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), oldfrc ? @"updated" : @"set");
             [self performFetch];
@@ -69,27 +69,6 @@
     return rows;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//	NSString *titleString = [[[self.fetchedResultsController sections] objectAtIndex:section] name];
-//    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-//    if ([titleString isEqualToString:[appDelegate dateStringOfToday]]) {
-//        titleString = @"今日热门";
-//    }
-//    return titleString;
-//}
-
-
-//- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
-//{
-//	return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
-//}
-
-//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
-//{
-//    return [self.fetchedResultsController sectionIndexTitles];
-//}
-
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
@@ -111,9 +90,6 @@
         case NSFetchedResultsChangeDelete:
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
-//        default:
-//            NSLog(@"Not in the list");
-//            break;
     }
 }
 

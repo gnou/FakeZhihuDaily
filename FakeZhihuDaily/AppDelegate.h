@@ -15,6 +15,7 @@
 - (UIColor *)tintColor;
 - (void)startFetch;
 - (NSString *)dateStringOfToday;
+- (BOOL)isValidDateString:(NSString *)dateString;
 - (void)fetchStoriesOfDate:(NSString *)dateString;
 @end
 
