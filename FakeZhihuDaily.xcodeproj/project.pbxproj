@@ -13,6 +13,7 @@
 		4C87F4E31A32FE2A008A8555 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */; };
 		4C87F4E61A32FE64008A8555 /* StoryCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */; };
 		4C87F4E91A3306D0008A8555 /* BodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E81A3306D0008A8555 /* BodyViewController.m */; };
+		4CBD5DFA1A3AF777001C6FC0 /* SideBarTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD5DF91A3AF777001C6FC0 /* SideBarTableViewController.m */; };
 		4CF2D6E81A2874590080B019 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D6E71A2874590080B019 /* main.m */; };
 		4CF2D6EB1A2874590080B019 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D6EA1A2874590080B019 /* AppDelegate.m */; };
 		4CF2D6F11A2874590080B019 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CF2D6EF1A2874590080B019 /* Main.storyboard */; };
@@ -54,6 +55,8 @@
 		4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCDTVC.m; sourceTree = "<group>"; };
 		4C87F4E71A3306D0008A8555 /* BodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyViewController.h; sourceTree = "<group>"; };
 		4C87F4E81A3306D0008A8555 /* BodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BodyViewController.m; sourceTree = "<group>"; };
+		4CBD5DF81A3AF777001C6FC0 /* SideBarTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideBarTableViewController.h; sourceTree = "<group>"; };
+		4CBD5DF91A3AF777001C6FC0 /* SideBarTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideBarTableViewController.m; sourceTree = "<group>"; };
 		4CF2D6E21A2874590080B019 /* FakeZhihuDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FakeZhihuDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF2D6E61A2874590080B019 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CF2D6E71A2874590080B019 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -144,6 +147,8 @@
 				4CF2D70D1A2875310080B019 /* TitleCell.h */,
 				4CF2D70E1A2875310080B019 /* TitleCell.m */,
 				4CF2D6EF1A2874590080B019 /* Main.storyboard */,
+				4CBD5DF81A3AF777001C6FC0 /* SideBarTableViewController.h */,
+				4CBD5DF91A3AF777001C6FC0 /* SideBarTableViewController.m */,
 				4C87F4E41A32FE64008A8555 /* StoryCDTVC.h */,
 				4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */,
 				4C87F4E11A32FE2A008A8555 /* CoreDataTableViewController.h */,
@@ -332,6 +337,7 @@
 				4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */,
 				4CF59B681A37EC3200475CB7 /* Date+Create.m in Sources */,
 				4C87F4E31A32FE2A008A8555 /* CoreDataTableViewController.m in Sources */,
+				4CBD5DFA1A3AF777001C6FC0 /* SideBarTableViewController.m in Sources */,
 				4C87F4E61A32FE64008A8555 /* StoryCDTVC.m in Sources */,
 				4CF2D7101A2875310080B019 /* TitleCell.m in Sources */,
 				4CF2D6EB1A2874590080B019 /* AppDelegate.m in Sources */,

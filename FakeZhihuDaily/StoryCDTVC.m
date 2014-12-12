@@ -15,6 +15,7 @@
 #import "BodyViewController.h"
 #import "Date.h"
 #import <ReactiveCocoa.h>
+#import <SWRevealViewController.h>
 
 #define HEIGHT_OF_SECTION_HEADER 37.5f
 
@@ -42,6 +43,15 @@
         self.screenHeight = [UIScreen mainScreen].bounds.size.height;
     }];
 }
+
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//    
+//    self.sideBarButton.target = self.revealViewController;
+//    self.sideBarButton.action = @selector(revealToggle:);
+//    
+//    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+//}
 
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     _managedObjectContext = managedObjectContext;

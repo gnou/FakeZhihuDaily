@@ -9,5 +9,6 @@
 #import "CoreDataTableViewController.h"
 
 @interface StoryCDTVC : CoreDataTableViewController
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *sideBarButton;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @end

@@ -103,8 +103,10 @@
     if (!jsonError) {
         NSString *dateString = storyDictionary[@"date"];
         NSArray *storiesArray = storyDictionary[@"stories"];
+        NSArray *topStoriesArray = storyDictionary[@"top_stories"];
         [self.managedObjectContext performBlock:^{
             [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:self.managedObjectContext];
+            [Story loadStorysFromArray:topStoriesArray withDateString:@"Top Stories" intoManagedObjectContext:self.managedObjectContext];
             [self.managedObjectContext save:NULL];
         }];
     }
