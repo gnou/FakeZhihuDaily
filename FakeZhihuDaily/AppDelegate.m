@@ -13,7 +13,6 @@
 
 @interface AppDelegate () <NSURLSessionDownloadDelegate>
 @property (nonatomic, strong) NSURLSession *downloadStorysSession;
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @end
 
 @implementation AppDelegate
@@ -37,8 +36,8 @@
 
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     _managedObjectContext = managedObjectContext;
-    NSDictionary *userInfo = managedObjectContext ? @{StorysDatabaseAvailabilityContext:managedObjectContext} : nil;
-    [[NSNotificationCenter defaultCenter] postNotificationName:StorysDatabaseAvailabilityNotification object:self userInfo:userInfo];
+//    NSDictionary *userInfo = managedObjectContext ? @{StorysDatabaseAvailabilityContext:managedObjectContext} : nil;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:StorysDatabaseAvailabilityNotification object:self userInfo:userInfo];
 }
 
 - (UIColor *)tintColor {
@@ -48,13 +47,13 @@
     
     UIColor *myTintColor = [self tintColor];
     
-    [[UITabBar appearance] setTintColor:myTintColor];
+    //[[UITabBar appearance] setTintColor:myTintColor];
     
     [[UINavigationBar appearance] setBarStyle:UIBarStyleDefault];
     [[UINavigationBar appearance] setBarTintColor:myTintColor];
     
-    [[UIToolbar appearance] setBarStyle:UIBarStyleDefault];
-    [[UIToolbar appearance] setBarTintColor:myTintColor];
+//    [[UIToolbar appearance] setBarStyle:UIBarStyleDefault];
+//    [[UIToolbar appearance] setBarTintColor:myTintColor];
 }
 
 - (void)startFetch {
@@ -103,10 +102,10 @@
     if (!jsonError) {
         NSString *dateString = storyDictionary[@"date"];
         NSArray *storiesArray = storyDictionary[@"stories"];
-        NSArray *topStoriesArray = storyDictionary[@"top_stories"];
+//        NSArray *topStoriesArray = storyDictionary[@"top_stories"];
         [self.managedObjectContext performBlock:^{
             [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:self.managedObjectContext];
-            [Story loadStorysFromArray:topStoriesArray withDateString:@"Top Stories" intoManagedObjectContext:self.managedObjectContext];
+//            [Story loadStorysFromArray:topStoriesArray withDateString:@"Top Stories" intoManagedObjectContext:self.managedObjectContext];
             [self.managedObjectContext save:NULL];
         }];
     }

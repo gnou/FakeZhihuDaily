@@ -20,7 +20,12 @@
 #define HEIGHT_OF_SECTION_HEADER 37.5f
 
 @interface StoryCDTVC ()
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+@property (strong, nonatomic) IBOutlet UIView *view;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 @property (nonatomic) CGFloat screenHeight;
@@ -28,30 +33,56 @@
 
 @implementation StoryCDTVC
 
-- (void)awakeFromNib {
-    [[NSNotificationCenter defaultCenter] addObserverForName:StorysDatabaseAvailabilityNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        self.managedObjectContext = note.userInfo[StorysDatabaseAvailabilityContext];
-        //[self.navigationController setNavigationBarHidden:YES];
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-        
-        self.appDelegate = [UIApplication sharedApplication].delegate;
-        
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        self.dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
-        self.dateFormatter.dateStyle = NSDateFormatterFullStyle;
-        self.screenHeight = [UIScreen mainScreen].bounds.size.height;
-    }];
+- (void)setUp {
+//    [[NSNotificationCenter defaultCenter] addObserverForName:StorysDatabaseAvailabilityNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+//        self.managedObjectContext = note.userInfo[StorysDatabaseAvailabilityContext];
+//    }];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+    self.appDelegate = [UIApplication sharedApplication].delegate;
+    
+    if (self.appDelegate.managedObjectContext) {
+        self.managedObjectContext = self.appDelegate.managedObjectContext;
+    } else {
+        // Handle Error
+        NSLog(@"not managedObjectContext in appDelegate");
+    }
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    self.dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
+    self.dateFormatter.dateStyle = NSDateFormatterFullStyle;
+    self.screenHeight = [UIScreen mainScreen].bounds.size.height;
 }
 
-//- (void)viewDidLoad {
-//    [super viewDidLoad];
-//    
-//    self.sideBarButton.target = self.revealViewController;
-//    self.sideBarButton.action = @selector(revealToggle:);
-//    
-//    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-//}
+- (void)awakeFromNib {
+    [self setUp];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [self setUp];
+    }
+    return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.sideBarButton.target = self.revealViewController;
+    self.sideBarButton.action = @selector(revealToggle:);
+    
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
 
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     _managedObjectContext = managedObjectContext;
@@ -68,7 +99,47 @@
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:@"date.dateString" cacheName:nil];
 }
 
+- (void)setFetchedResultsController:(NSFetchedResultsController *)newfrc
+{
+    _fetchedResultsController = newfrc;
+    _fetchedResultsController.delegate = self;
+    
+    [self performFetch];
+}
+
+#pragma mark - Fetching
+
+- (void)performFetch
+{
+    if (self.fetchedResultsController) {
+        NSError *error;
+        BOOL success = [self.fetchedResultsController performFetch:&error];
+        if (!success) NSLog(@"[%@ %@] performFetch: failed", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        if (error) {
+            NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
+        }
+    }
+    
+    [self.tableView reloadData];
+}
+
 #pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    NSInteger sections = [[self.fetchedResultsController sections] count];
+    return sections;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger rows = 0;
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        rows = [sectionInfo numberOfObjects];
+    }
+    return rows;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TitleCell *cell = (TitleCell *)[tableView dequeueReusableCellWithIdentifier:@"TitleCell" forIndexPath:indexPath];
@@ -110,23 +181,25 @@
     
     NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:sectionHeaderView attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
     [sectionHeaderView addConstraint:centerY];
-
-//    [[[[[[RACObserve(sectionHeaderView, frame) ignore:nil]
-//       map:^id(NSNumber *rect) {
-//        return [NSNumber numberWithDouble:rect.CGRectValue.origin.y];
-//    }]
-//     filter:^BOOL(NSNumber *sectionOriginalY) {
-//         return sectionOriginalY.floatValue > 0.0;
-//    }] filter:^BOOL(NSNumber *sectionOriginalY) {
-//        //return self.tableView.contentOffset.y > 1500.0;
-//        return (sectionOriginalY.floatValue <= (self.tableView.contentOffset.y + 64.0 - HEIGHT_OF_SECTION_HEADER));
-//    }] deliverOn:[RACScheduler mainThreadScheduler]]
-//     subscribeNext:^(NSNumber *sectionOriginalY) {
-//         self.title = displayText;
-//    }];
+    
+    //    [[[[[[RACObserve(sectionHeaderView, frame) ignore:nil]
+    //       map:^id(NSNumber *rect) {
+    //        return [NSNumber numberWithDouble:rect.CGRectValue.origin.y];
+    //    }]
+    //     filter:^BOOL(NSNumber *sectionOriginalY) {
+    //         return sectionOriginalY.floatValue > 0.0;
+    //    }] filter:^BOOL(NSNumber *sectionOriginalY) {
+    //        //return self.tableView.contentOffset.y > 1500.0;
+    //        return (sectionOriginalY.floatValue <= (self.tableView.contentOffset.y + 64.0 - HEIGHT_OF_SECTION_HEADER));
+    //    }] deliverOn:[RACScheduler mainThreadScheduler]]
+    //     subscribeNext:^(NSNumber *sectionOriginalY) {
+    //         self.title = displayText;
+    //    }];
     
     return sectionHeaderView;
 }
+
+#pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -148,6 +221,63 @@
         
         [self.appDelegate fetchStoriesOfDate:currentDateString];
     }
+}
+
+#pragma mark - NSFetchedResultsControllerDelegate
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller
+  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex
+     forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller
+   didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath
+     forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
 }
 
 #pragma mark- Useful Functions
@@ -197,6 +327,8 @@
         
     }
 }
+
+#pragma mark - UIScrollViewDelegate
 
 // 把contentView向上移动一个HEIGHT_OF_SECTION_HEADER的高度，
 // 以防止sectionHeaderView卡在navigationBar下面

@@ -10,7 +10,6 @@
 		4C2144071A39A72200757A36 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C2144061A39A72200757A36 /* Localizable.strings */; };
 		4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4D81A32EED6008A8555 /* AppDelegate+MOC.m */; };
 		4C87F4DD1A32F131008A8555 /* Story+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4DC1A32F131008A8555 /* Story+Create.m */; };
-		4C87F4E31A32FE2A008A8555 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */; };
 		4C87F4E61A32FE64008A8555 /* StoryCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */; };
 		4C87F4E91A3306D0008A8555 /* BodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4E81A3306D0008A8555 /* BodyViewController.m */; };
 		4CBD5DFA1A3AF777001C6FC0 /* SideBarTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD5DF91A3AF777001C6FC0 /* SideBarTableViewController.m */; };
@@ -49,8 +48,6 @@
 		4C87F4DA1A32F00F008A8555 /* StorysDatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorysDatabaseAvailability.h; sourceTree = "<group>"; };
 		4C87F4DB1A32F131008A8555 /* Story+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Story+Create.h"; sourceTree = "<group>"; };
 		4C87F4DC1A32F131008A8555 /* Story+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Story+Create.m"; sourceTree = "<group>"; };
-		4C87F4E11A32FE2A008A8555 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
-		4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 		4C87F4E41A32FE64008A8555 /* StoryCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCDTVC.h; sourceTree = "<group>"; };
 		4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCDTVC.m; sourceTree = "<group>"; };
 		4C87F4E71A3306D0008A8555 /* BodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyViewController.h; sourceTree = "<group>"; };
@@ -151,8 +148,6 @@
 				4CBD5DF91A3AF777001C6FC0 /* SideBarTableViewController.m */,
 				4C87F4E41A32FE64008A8555 /* StoryCDTVC.h */,
 				4C87F4E51A32FE64008A8555 /* StoryCDTVC.m */,
-				4C87F4E11A32FE2A008A8555 /* CoreDataTableViewController.h */,
-				4C87F4E21A32FE2A008A8555 /* CoreDataTableViewController.m */,
 				4C87F4E71A3306D0008A8555 /* BodyViewController.h */,
 				4C87F4E81A3306D0008A8555 /* BodyViewController.m */,
 				4CF2D6F21A2874590080B019 /* Images.xcassets */,
@@ -336,7 +331,6 @@
 			files = (
 				4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */,
 				4CF59B681A37EC3200475CB7 /* Date+Create.m in Sources */,
-				4C87F4E31A32FE2A008A8555 /* CoreDataTableViewController.m in Sources */,
 				4CBD5DFA1A3AF777001C6FC0 /* SideBarTableViewController.m in Sources */,
 				4C87F4E61A32FE64008A8555 /* StoryCDTVC.m in Sources */,
 				4CF2D7101A2875310080B019 /* TitleCell.m in Sources */,
