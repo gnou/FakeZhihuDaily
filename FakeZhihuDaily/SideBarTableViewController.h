@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
-@interface SideBarTableViewController : UITableViewController
+@interface SideBarTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @end

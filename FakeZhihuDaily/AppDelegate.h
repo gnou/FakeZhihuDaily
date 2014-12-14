@@ -16,7 +16,7 @@
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 - (UIColor *)tintColor;
-- (void)startFetch;
+- (void)startFetchLatestStories;
 - (NSString *)dateStringOfToday;
 - (BOOL)isValidDateString:(NSString *)dateString;
 - (void)fetchStoriesOfDate:(NSString *)dateString;

@@ -45,6 +45,7 @@
     if (self.appDelegate.managedObjectContext) {
         self.managedObjectContext = self.appDelegate.managedObjectContext;
     } else {
+#warning Handle error here
         // Handle Error
         NSLog(@"not managedObjectContext in appDelegate");
     }

@@ -13,8 +13,16 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="date" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Date" inverseName="stories" inverseEntity="Date" syncable="YES"/>
     </entity>
+    <entity name="Theme" representedClassName="Theme" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="descrip" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Date" positionX="133" positionY="27" width="128" height="73"/>
         <element name="Story" positionX="-54" positionY="-9" width="128" height="148"/>
+        <element name="Theme" positionX="-27" positionY="236" width="128" height="118"/>
     </elements>
 </model>

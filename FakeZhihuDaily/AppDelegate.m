@@ -10,6 +10,7 @@
 #import "AppDelegate+MOC.h"
 #import "StorysDatabaseAvailability.h"
 #import "Story+Create.h"
+#import "Theme+Create.h"
 
 @interface AppDelegate () <NSURLSessionDownloadDelegate>
 @property (nonatomic, strong) NSURLSession *downloadStorysSession;
@@ -23,7 +24,9 @@
     
     [self initAppearence];
     
-    [self startFetch];
+    [self fetchThemes];
+    
+    [self startFetchLatestStories];
         
     return YES;
 }
@@ -56,7 +59,7 @@
 //    [[UIToolbar appearance] setBarTintColor:myTintColor];
 }
 
-- (void)startFetch {
+- (void)startFetchLatestStories {
     [self fetchStoriesOfDate:@"today"];
 }
 
@@ -81,6 +84,32 @@
             }
         }
     }];
+}
+
+- (void)fetchThemes {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+    
+    NSString *urlString = @"http://news-at.zhihu.com/api/3/themes";
+    
+    NSURLSessionDataTask *dataTask = [session dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+# warning Need to handle error here
+            // Handle Error
+        } else {
+            NSError *jsonError;
+            NSDictionary *themeJSONDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+            if (jsonError) {
+#warning Need to handle error here
+                // Handle error
+            } else {
+                [self.managedObjectContext performBlock:^{
+                    [Theme loadThemesWithThemesArray:themeJSONDictionary[@"others"] intoManagedObjectContext:self.managedObjectContext];
+                }];
+            }
+        }
+    }];
+    [dataTask resume];
 }
 
 - (BOOL)isValidDateString:(NSString *)dateString {
