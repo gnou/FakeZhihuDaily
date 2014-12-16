@@ -6,8 +6,7 @@
 //  Copyright (c) 2014年 gnou. All rights reserved.
 //
 
-#import "StoryCDTVC.h"
-#import "StorysDatabaseAvailability.h"
+#import "MainStoriesViewController.h"
 #import "TitleCell.h"
 #import "Story.h"
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -16,10 +15,11 @@
 #import "Date.h"
 #import <ReactiveCocoa.h>
 #import <SWRevealViewController.h>
+#import "NetworkClient.h"
 
 #define HEIGHT_OF_SECTION_HEADER 37.5f
 
-@interface StoryCDTVC ()
+@interface MainStoriesViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
@@ -29,9 +29,11 @@
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 @property (nonatomic) CGFloat screenHeight;
+
+@property (nonatomic, strong) NetworkClient *networkClient;
 @end
 
-@implementation StoryCDTVC
+@implementation MainStoriesViewController
 
 - (void)setUp {
 //    [[NSNotificationCenter defaultCenter] addObserverForName:StorysDatabaseAvailabilityNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
@@ -54,6 +56,8 @@
     self.dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     self.dateFormatter.dateStyle = NSDateFormatterFullStyle;
     self.screenHeight = [UIScreen mainScreen].bounds.size.height;
+    
+    self.networkClient = [[NetworkClient alloc] init];
 }
 
 - (void)awakeFromNib {
@@ -220,7 +224,7 @@
         Date *currentDate = story.date;
         NSString *currentDateString = currentDate.dateString;
         
-        [self.appDelegate fetchStoriesOfDate:currentDateString];
+        [self.networkClient fetchStoriesBeforCertainDate:currentDateString intoManagedObjectContext:self.managedObjectContext];
     }
 }
 
@@ -247,7 +251,6 @@
             break;
     }
 }
-
 
 - (void)controller:(NSFetchedResultsController *)controller
    didChangeObject:(id)anObject
@@ -325,7 +328,6 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
         bodyVC.id = story.id;
-        
     }
 }
 

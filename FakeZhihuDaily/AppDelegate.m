@@ -8,13 +8,13 @@
 
 #import "AppDelegate.h"
 #import "AppDelegate+MOC.h"
-#import "StorysDatabaseAvailability.h"
 #import "Story+Create.h"
 #import "Theme+Create.h"
+#import "NetworkClient.h"
 
-@interface AppDelegate () <NSURLSessionDownloadDelegate>
-@property (nonatomic, strong) NSURLSession *downloadStorysSession;
-@end
+//@interface AppDelegate () <NSURLSessionDownloadDelegate>
+//@property (nonatomic, strong) NSURLSession *downloadStorysSession;
+//@end
 
 @implementation AppDelegate
 
@@ -24,11 +24,26 @@
     
     [self initAppearence];
     
-    [self fetchThemes];
+   // [self fetchThemes];
     
-    [self startFetchLatestStories];
+   // [self startFetchLatestStories];
+    NetworkClient *networkClient = [[NetworkClient alloc] init];
+    [networkClient fetchLatestStoriesIntoMangedObejctContext:self.managedObjectContext];
+    [networkClient fetchThemesIntoManagedObjectContext:self.managedObjectContext];
         
     return YES;
+}
+
+- (UIColor *)tintColor {
+    return [UIColor colorWithRed:76/255.0f green:211/255.0f blue:235/255.0f alpha:1.0f];
+}
+
+- (void)initAppearence {
+    
+    UIColor *myTintColor = [self tintColor];
+    
+    [[UINavigationBar appearance] setBarStyle:UIBarStyleDefault];
+    [[UINavigationBar appearance] setBarTintColor:myTintColor];
 }
 
 - (NSString *)dateStringOfToday {
@@ -37,108 +52,35 @@
     return [dateFormatter stringFromDate:[NSDate date]];
 }
 
-- (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    _managedObjectContext = managedObjectContext;
-//    NSDictionary *userInfo = managedObjectContext ? @{StorysDatabaseAvailabilityContext:managedObjectContext} : nil;
-//    [[NSNotificationCenter defaultCenter] postNotificationName:StorysDatabaseAvailabilityNotification object:self userInfo:userInfo];
-}
-
-- (UIColor *)tintColor {
-    return [UIColor colorWithRed:76/255.0f green:211/255.0f blue:235/255.0f alpha:1.0f];
-}
-- (void)initAppearence {
-    
-    UIColor *myTintColor = [self tintColor];
-    
-    //[[UITabBar appearance] setTintColor:myTintColor];
-    
-    [[UINavigationBar appearance] setBarStyle:UIBarStyleDefault];
-    [[UINavigationBar appearance] setBarTintColor:myTintColor];
-    
-//    [[UIToolbar appearance] setBarStyle:UIBarStyleDefault];
-//    [[UIToolbar appearance] setBarTintColor:myTintColor];
-}
-
-- (void)startFetchLatestStories {
-    [self fetchStoriesOfDate:@"today"];
-}
-
-- (void)fetchStoriesOfDate:(NSString *)dateString {
-    NSString *urlString;
-    if ([dateString isEqualToString:@"today"]) {
-        urlString = @"http://news-at.zhihu.com/api/3/news/latest";
-    } else if ([self isValidDateString:dateString]) {
-        urlString = [NSString stringWithFormat:@"http://news.at.zhihu.com/api/3/news/before/%@", dateString];
-    } else {
-        // Handle error
-        NSLog(@"dateString error");
-    }
-    
-    [self.downloadStorysSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
-        if (![downloadTasks count]) {
-            NSURLSessionDownloadTask *task = [self.downloadStorysSession downloadTaskWithURL:[NSURL URLWithString:urlString]];
-            [task resume];
-        } else {
-            for (NSURLSessionDownloadTask *task in downloadTasks) {
-                [task resume];
-            }
-        }
-    }];
-}
-
-- (void)fetchThemes {
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
-    
-    NSString *urlString = @"http://news-at.zhihu.com/api/3/themes";
-    
-    NSURLSessionDataTask *dataTask = [session dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error) {
-# warning Need to handle error here
-            // Handle Error
-        } else {
-            NSError *jsonError;
-            NSDictionary *themeJSONDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
-            if (jsonError) {
-#warning Need to handle error here
-                // Handle error
-            } else {
-                [self.managedObjectContext performBlock:^{
-                    [Theme loadThemesWithThemesArray:themeJSONDictionary[@"others"] intoManagedObjectContext:self.managedObjectContext];
-                }];
-            }
-        }
-    }];
-    [dataTask resume];
-}
-
 - (BOOL)isValidDateString:(NSString *)dateString {
     return dateString.integerValue > 20130520 && dateString.integerValue <= [self dateStringOfToday].integerValue;
 }
 
-- (NSURLSession *)downloadStorysSession {
-    if (!_downloadStorysSession) {
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"Fetch Storys"];
-        _downloadStorysSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
-    }
-    return _downloadStorysSession;
-}
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
-    NSData *storyData = [NSData dataWithContentsOfURL:location];
-    NSError *jsonError;
-    NSDictionary *storyDictionary = [NSJSONSerialization JSONObjectWithData:storyData options:NSJSONReadingAllowFragments error:&jsonError];
-    if (!jsonError) {
-        NSString *dateString = storyDictionary[@"date"];
-        NSArray *storiesArray = storyDictionary[@"stories"];
-//        NSArray *topStoriesArray = storyDictionary[@"top_stories"];
-        [self.managedObjectContext performBlock:^{
-            [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:self.managedObjectContext];
-//            [Story loadStorysFromArray:topStoriesArray withDateString:@"Top Stories" intoManagedObjectContext:self.managedObjectContext];
-            [self.managedObjectContext save:NULL];
-        }];
-    }
-}
+//
+//- (NSURLSession *)downloadStorysSession {
+//    if (!_downloadStorysSession) {
+//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"Fetch Storys"];
+//        _downloadStorysSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+//    }
+//    return _downloadStorysSession;
+//}
+//
+//- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+//    NSData *storyData = [NSData dataWithContentsOfURL:location];
+//    NSError *jsonError;
+//    NSDictionary *storyDictionary = [NSJSONSerialization JSONObjectWithData:storyData options:NSJSONReadingAllowFragments error:&jsonError];
+//    if (!jsonError) {
+//        NSString *dateString = storyDictionary[@"date"];
+//        NSArray *storiesArray = storyDictionary[@"stories"];
+////        NSArray *topStoriesArray = storyDictionary[@"top_stories"];
+//        [self.managedObjectContext performBlock:^{
+//            [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:self.managedObjectContext];
+////            [Story loadStorysFromArray:topStoriesArray withDateString:@"Top Stories" intoManagedObjectContext:self.managedObjectContext];
+//            [self.managedObjectContext save:NULL];
+//        }];
+//    }
+//}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

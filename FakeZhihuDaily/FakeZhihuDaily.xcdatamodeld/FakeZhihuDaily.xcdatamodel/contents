@@ -19,9 +19,9 @@
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Theme_Story" inverseName="blongsTo" inverseEntity="Theme_Story" syncable="YES"/>
+        <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ThemeStory" inverseName="blongsTo" inverseEntity="ThemeStory" syncable="YES"/>
     </entity>
-    <entity name="Theme_Story" representedClassName="Theme_Story" syncable="YES">
+    <entity name="ThemeStory" representedClassName="ThemeStory" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isRead" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -30,9 +30,9 @@
         <relationship name="blongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Theme" inverseName="stories" inverseEntity="Theme" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Date" positionX="133" positionY="27" width="128" height="73"/>
-        <element name="Story" positionX="-54" positionY="-9" width="128" height="148"/>
-        <element name="Theme" positionX="151" positionY="197" width="128" height="133"/>
-        <element name="Theme_Story" positionX="-56" positionY="189" width="128" height="133"/>
+        <element name="Date" positionX="0" positionY="0" width="128" height="75"/>
+        <element name="Story" positionX="196" positionY="3" width="128" height="150"/>
+        <element name="Theme" positionX="223" positionY="207" width="128" height="135"/>
+        <element name="ThemeStory" positionX="0" positionY="252" width="128" height="133"/>
     </elements>
 </model>

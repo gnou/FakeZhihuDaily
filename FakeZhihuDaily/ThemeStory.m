@@ -6,11 +6,11 @@
 //  Copyright (c) 2014年 gnou. All rights reserved.
 //
 
-#import "Theme_Story.h"
+#import "ThemeStory.h"
 #import "Theme.h"
 
 
-@implementation Theme_Story
+@implementation ThemeStory
 
 @dynamic id;
 @dynamic imageURL;
