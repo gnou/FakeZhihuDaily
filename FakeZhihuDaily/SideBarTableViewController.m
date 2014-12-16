@@ -9,12 +9,15 @@
 #import "SideBarTableViewController.h"
 #import "AppDelegate.h"
 #import "Theme.h"
+#import <SWRevealViewController.h>
+#import "MainStoriesViewController.h"
+#import "ThemeStoriesViewController.h"
 
 @interface SideBarTableViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) AppDelegate *appDelegate;
-
+@property (nonatomic, strong) NSArray *menuItems;
 @end
 
 @implementation SideBarTableViewController
@@ -29,7 +32,7 @@
         // Handle Error
         NSLog(@"not managedObjectContext in appDelegate");
     }
-    
+
 }
 
 - (void)awakeFromNib {
@@ -51,7 +54,8 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.tableView.rowHeight = 44;
+    
+    //self.tableView.rowHeight = 44;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -99,64 +103,36 @@
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
         rows = [sectionInfo numberOfObjects];
     }
-    return rows;
+    return rows + 1;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];   
+    static NSString *cellIdentifier = nil;
+    switch (indexPath.row) {
+        case 0:
+            cellIdentifier = @"Home";
+            break;
+            
+        default:
+            cellIdentifier = @"Theme";
+            break;
+    }
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
-    Theme *theme = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = theme.name;
+    if (indexPath.row == 0) {
+        cell.textLabel.text = @"首页";
+    } else {
+        NSIndexPath *objectIndexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
+        Theme *theme = [self.fetchedResultsController objectAtIndexPath:objectIndexPath];
+        cell.textLabel.text = theme.name;
+    }
+    
     
     return cell;
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 #pragma mark - NSFetchedResultsControllerDelegate
 
@@ -181,7 +157,6 @@
             break;
     }
 }
-
 
 - (void)controller:(NSFetchedResultsController *)controller
    didChangeObject:(id)anObject
@@ -215,5 +190,29 @@
     [self.tableView endUpdates];
 }
 
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+     
+     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+     
+     UINavigationController *destViewController = (UINavigationController*)segue.destinationViewController;
+     
+     Theme *theme = nil;
+     
+     if (indexPath.row > 0) {
+         NSIndexPath *objectIndexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
+         NSLog(@"Real indexPath.row : %lu, section: %lu", objectIndexPath.row, objectIndexPath.section);
+         theme = [self.fetchedResultsController objectAtIndexPath:objectIndexPath];
+     }
+     
+     if ([[destViewController childViewControllers].firstObject isKindOfClass:[ThemeStoriesViewController class]]) {
+         ThemeStoriesViewController *themeVC = (ThemeStoriesViewController *)[destViewController childViewControllers][0];
+         NSLog(@"%lu", theme.id.integerValue);
+         themeVC.themeID = theme.id.integerValue;
+         themeVC.title = theme.name;
+     }
+ }
 
 @end

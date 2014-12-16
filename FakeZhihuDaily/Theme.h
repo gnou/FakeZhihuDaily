@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Theme_Story;
+@class ThemeStory;
 
 @interface Theme : NSManagedObject
 
@@ -23,8 +23,8 @@
 
 @interface Theme (CoreDataGeneratedAccessors)
 
-- (void)addStoriesObject:(Theme_Story *)value;
-- (void)removeStoriesObject:(Theme_Story *)value;
+- (void)addStoriesObject:(ThemeStory *)value;
+- (void)removeStoriesObject:(ThemeStory *)value;
 - (void)addStories:(NSSet *)values;
 - (void)removeStories:(NSSet *)values;
 

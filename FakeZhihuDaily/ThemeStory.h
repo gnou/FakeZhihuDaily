@@ -11,7 +11,7 @@
 
 @class Theme;
 
-@interface Theme_Story : NSManagedObject
+@interface ThemeStory : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSString * imageURL;

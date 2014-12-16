@@ -1,20 +1,20 @@
 //
-//  Theme_Story+Create.m
+//  ThemeStory+Create.m
 //  FakeZhihuDaily
 //
 //  Created by CuiMingyu on 14/12/16.
 //  Copyright (c) 2014年 gnou. All rights reserved.
 //
 
-#import "Theme_Story+Create.h"
-#import "Theme+Create.h"
+#import "ThemeStory+Create.h"
+#import "Theme+Create.m"
 
-@implementation Theme_Story (Create)
+@implementation ThemeStory (Create)
 
-+ (Theme_Story *)themeStoryWithStoryInfo:(NSDictionary *)storyDictionary withThemeID:(NSUInteger)id inManagedObjectContext:(NSManagedObjectContext *)context {
-    Theme_Story *story =  nil;
++ (ThemeStory *)themeStoryWithStoryInfo:(NSDictionary *)storyDictionary withThemeID:(NSUInteger)id inManagedObjectContext:(NSManagedObjectContext *)context {
+    ThemeStory *story =  nil;
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Theme_Story"];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ThemeStory"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"id = %@", storyDictionary[@"id"]];
     
     NSError *error;
@@ -26,7 +26,7 @@
     } else if ([matchedResult count]) {
         story = matchedResult.firstObject;
     } else {
-        story = [NSEntityDescription insertNewObjectForEntityForName:@"Theme_Story" inManagedObjectContext:context];
+        story = [NSEntityDescription insertNewObjectForEntityForName:@"ThemeStory" inManagedObjectContext:context];
         story.id = storyDictionary[@"id"];
         story.shareURL = storyDictionary[@"share_url"];
         story.title = storyDictionary[@"title"];

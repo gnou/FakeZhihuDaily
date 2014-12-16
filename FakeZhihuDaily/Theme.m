@@ -7,7 +7,7 @@
 //
 
 #import "Theme.h"
-#import "Theme_Story.h"
+#import "ThemeStory.h"
 
 
 @implementation Theme
