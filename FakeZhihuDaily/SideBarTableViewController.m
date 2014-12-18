@@ -28,8 +28,6 @@
     if (self.appDelegate.managedObjectContext) {
         self.managedObjectContext = self.appDelegate.managedObjectContext;
     } else {
-#warning Handle error here
-        // Handle Error
         NSLog(@"not managedObjectContext in appDelegate");
     }
 
@@ -203,13 +201,11 @@
      
      if (indexPath.row > 0) {
          NSIndexPath *objectIndexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
-         NSLog(@"Real indexPath.row : %lu, section: %lu", objectIndexPath.row, objectIndexPath.section);
          theme = [self.fetchedResultsController objectAtIndexPath:objectIndexPath];
      }
      
      if ([[destViewController childViewControllers].firstObject isKindOfClass:[ThemeStoriesViewController class]]) {
          ThemeStoriesViewController *themeVC = (ThemeStoriesViewController *)[destViewController childViewControllers][0];
-         NSLog(@"%lu", theme.id.integerValue);
          themeVC.themeID = theme.id.integerValue;
          themeVC.title = theme.name;
      }

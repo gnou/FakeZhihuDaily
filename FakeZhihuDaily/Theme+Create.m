@@ -20,7 +20,7 @@
     NSArray *resultArray = [context executeFetchRequest:request error:&error];
     
     if (!resultArray || error || [resultArray count] > 1) {
-        // Handle Error
+        NSLog(@"ERROR in %s", __FUNCTION__);
     } else if ([resultArray count]) {
         theme = resultArray.firstObject;
     } else if (![resultArray count]) {

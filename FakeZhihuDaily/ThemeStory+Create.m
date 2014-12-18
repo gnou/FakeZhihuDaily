@@ -21,8 +21,7 @@
     NSArray *matchedResult = [context executeFetchRequest:fetchRequest error:&error];
     
     if (matchedResult == nil || error || [matchedResult count] > 1) {
-#warning Handle error
-        //Handle error
+        NSLog(@"Error in %s", __FUNCTION__);
     } else if ([matchedResult count]) {
         story = matchedResult.firstObject;
     } else {

@@ -10,4 +10,5 @@
 
 @interface BodyViewController : UIViewController
 @property (nonatomic, strong) NSNumber *id;
+- (NSString *)generateWebPageFromDictionary:(NSDictionary *)dictionary;
 @end

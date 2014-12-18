@@ -14,6 +14,8 @@
 #import "ThemeStory.h"
 #import <UIImageView+WebCache.h>
 #import "BodyViewController.h"
+#import <TSMessage.h>
+#import "ThemeBodyViewController.h"
 
 @interface ThemeStoriesViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -40,15 +42,10 @@
     if (self.appDelegate.managedObjectContext) {
         self.managedObjectContext = self.appDelegate.managedObjectContext;
     } else {
-#warning Handle error here
-        // Handle Error
         NSLog(@"not managedObjectContext in appDelegate");
     }
-
-//    self.screenHeight = [UIScreen mainScreen].bounds.size.height;
     
     self.networkClient = [[NetworkClient alloc] init];
-//    [self.networkClient fetchThemeStoriesWithThemeID:self.themeID intoManagedObjectContext:self.managedObjectContext];
 }
 
 - (void)awakeFromNib {
@@ -64,7 +61,7 @@
 
 - (void)setThemeID:(NSUInteger)themeID {
     _themeID = themeID;
-    [self.networkClient fetchThemeStoriesWithThemeID:themeID intoManagedObjectContext:self.managedObjectContext];
+    [self fetchThemeStories];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"ThemeStory" inManagedObjectContext:self.managedObjectContext];
@@ -134,8 +131,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TitleCell *cell = (TitleCell *)[tableView dequeueReusableCellWithIdentifier:@"TitleCell" forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    ThemeStory *themeStory = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSString *titleString = themeStory.title;
+    NSString *imageURL = themeStory.imageURL;
+    TitleCell *cell;
+    if (imageURL) {
+        cell = (TitleCell *)[tableView dequeueReusableCellWithIdentifier:@"TitleCell" forIndexPath:indexPath];
+        [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    } else {
+        cell = (TitleCell *)[tableView dequeueReusableCellWithIdentifier:@"TitleCellWithoutImage" forIndexPath:indexPath];
+    }
+
+    cell.titleLabel.text = titleString;
+    
     return cell;
 }
 
@@ -199,29 +207,19 @@
     [self.tableView endUpdates];
 }
 
-#pragma mark- Useful Functions
-
-- (void)configureCell:(TitleCell *)cell atIndexPath:(NSIndexPath *)indexPath  {
-    ThemeStory *themeStory = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.titleLabel.text = themeStory.title;
-    NSString *imageURL = themeStory.imageURL;
-    if (!imageURL) {
-        NSLog(@"No image");
-        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:cell.titleImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:0.0f];
-        [cell addConstraint:constraint];
-    } else {
-        [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:themeStory.imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-    }
-}
-
 #pragma mark - navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"Goto News Body"]) {
-        BodyViewController *bodyVC = segue.destinationViewController;
+        ThemeBodyViewController *bodyVC = segue.destinationViewController;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         ThemeStory *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
         bodyVC.id = story.id;
-    }
+}
+
+- (void)fetchThemeStories {
+    [[self.networkClient fetchAndSaveThemeStoriesWithThemeID:self.themeID intoMangedObjectContext:self.managedObjectContext]
+    subscribeError:^(NSError *error) {
+        [TSMessage showNotificationInViewController:self.navigationController title:@"ERROR" subtitle:error.localizedDescription type:TSMessageNotificationTypeError];
+    }];
 }
 @end

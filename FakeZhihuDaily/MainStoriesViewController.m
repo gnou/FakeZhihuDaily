@@ -16,6 +16,7 @@
 #import <ReactiveCocoa.h>
 #import <SWRevealViewController.h>
 #import "NetworkClient.h"
+#import <TSMessage.h>
 
 #define HEIGHT_OF_SECTION_HEADER 37.5f
 
@@ -47,8 +48,6 @@
     if (self.appDelegate.managedObjectContext) {
         self.managedObjectContext = self.appDelegate.managedObjectContext;
     } else {
-#warning Handle error here
-        // Handle Error
         NSLog(@"not managedObjectContext in appDelegate");
     }
     
@@ -58,6 +57,7 @@
     self.screenHeight = [UIScreen mainScreen].bounds.size.height;
     
     self.networkClient = [[NetworkClient alloc] init];
+    
 }
 
 - (void)awakeFromNib {
@@ -82,7 +82,7 @@
     self.sideBarButton.action = @selector(revealToggle:);
     
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -147,8 +147,20 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TitleCell *cell = (TitleCell *)[tableView dequeueReusableCellWithIdentifier:@"TitleCell" forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    
+    Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSString *titleString = story.title;
+    NSString *imageURL = story.imageURL;
+    
+    TitleCell *cell;
+    if (imageURL) {
+        cell = (TitleCell *)[tableView dequeueReusableCellWithIdentifier:@"TitleCell" forIndexPath:indexPath];
+        [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    } else {
+        cell = (TitleCell *)[tableView dequeueReusableCellWithIdentifier:@"TitleCellWithoutImage" forIndexPath:indexPath];
+    }
+    cell.titleLabel.text = titleString;
+    //[self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
@@ -187,20 +199,6 @@
     NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:headerLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:sectionHeaderView attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
     [sectionHeaderView addConstraint:centerY];
     
-    //    [[[[[[RACObserve(sectionHeaderView, frame) ignore:nil]
-    //       map:^id(NSNumber *rect) {
-    //        return [NSNumber numberWithDouble:rect.CGRectValue.origin.y];
-    //    }]
-    //     filter:^BOOL(NSNumber *sectionOriginalY) {
-    //         return sectionOriginalY.floatValue > 0.0;
-    //    }] filter:^BOOL(NSNumber *sectionOriginalY) {
-    //        //return self.tableView.contentOffset.y > 1500.0;
-    //        return (sectionOriginalY.floatValue <= (self.tableView.contentOffset.y + 64.0 - HEIGHT_OF_SECTION_HEADER));
-    //    }] deliverOn:[RACScheduler mainThreadScheduler]]
-    //     subscribeNext:^(NSNumber *sectionOriginalY) {
-    //         self.title = displayText;
-    //    }];
-    
     return sectionHeaderView;
 }
 
@@ -224,7 +222,9 @@
         Date *currentDate = story.date;
         NSString *currentDateString = currentDate.dateString;
         
-        [self.networkClient fetchStoriesBeforCertainDate:currentDateString intoManagedObjectContext:self.managedObjectContext];
+        [[self.networkClient fetchAndSaveStoriesBeforeCertainDate:currentDateString intoManagedObjectContext:self.managedObjectContext] subscribeError:^(NSError *error) {
+            [TSMessage showNotificationInViewController:self.navigationController title:@"ERROR" subtitle:error.localizedDescription type:TSMessageNotificationTypeError];
+        }];
     }
 }
 
@@ -285,19 +285,19 @@
 }
 
 #pragma mark- Useful Functions
-
-- (void)configureCell:(TitleCell *)cell atIndexPath:(NSIndexPath *)indexPath  {
-    Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.titleLabel.text = story.title;
-    NSString *imageURL = story.imageURL;
-    if (!imageURL) {
-        NSLog(@"No image");
-        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:cell.titleImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:0.0f];
-        [cell addConstraint:constraint];
-    } else {
-        [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:story.imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-    }
-}
+//
+//- (void)configureCell:(TitleCell *)cell atIndexPath:(NSIndexPath *)indexPath  {
+//    Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    cell.titleLabel.text = story.title;
+//    NSString *imageURL = story.imageURL;
+//    if (!imageURL) {
+//        NSLog(@"No image");
+//        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:cell.titleImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:0.0f];
+//        [cell addConstraint:constraint];
+//    } else {
+//        [cell.titleImageView sd_setImageWithURL:[NSURL URLWithString:story.imageURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+//    }
+//}
 
 - (NSString *)displaySectionHeaderString:(NSString *)dateString {
     if ([self.appDelegate isValidDateString:dateString]) {
@@ -323,12 +323,12 @@
 #pragma mark - navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"Goto News Body"]) {
+//    if ([segue.identifier isEqualToString:@"Goto News Body"]) {
         BodyViewController *bodyVC = segue.destinationViewController;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
         bodyVC.id = story.id;
-    }
+//    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -342,5 +342,11 @@
     } else if (scrollView.contentOffset.y>=sectionHeaderHeight) {
         scrollView.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);
     }
+}
+
+- (IBAction)getLatestStories:(id)sender {
+    [[self.networkClient fetchAndSaveLatestStoriesIntoManagedObjectContext:self.managedObjectContext] subscribeError:^(NSError *error) {
+        NSLog(@"error : %@", error.localizedDescription);
+    }];
 }
 @end

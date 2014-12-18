@@ -11,6 +11,7 @@
 #import "ThemeStory+Create.h"
 #import "AppDelegate.h"
 #import "Theme+Create.h"
+#import "FZDError.h"
 
 @interface NetworkClient ()
 @property (nonatomic, strong) NSURLSession *session;
@@ -29,60 +30,130 @@
     return self;
 }
 
-- (void)fetchLatestStoriesIntoMangedObejctContext:(NSManagedObjectContext *)context {
-    [[self fetchLatestStories] subscribeNext:^(NSDictionary *jsonDictionary) {
-        NSString *dateString = jsonDictionary[@"date"];
-        NSArray *storiesArray = jsonDictionary[@"stories"];
+#pragma mark - Fetch&Save Latest Stories
+- (RACSignal *)fetchAndSaveLatestStoriesIntoManagedObjectContext:(NSManagedObjectContext *)context {
+    return [[self fetchLatestStories] flattenMap:^RACStream *(NSDictionary *jsonDictionary) {
+        return [self saveStories:jsonDictionary intoManagedObjectContext:context];
+    }];
+}
+
+- (RACSignal *)saveStories:(NSDictionary *)storiesDictionary
+        intoManagedObjectContext:(NSManagedObjectContext *)context {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSString *dateString = storiesDictionary[@"date"];
+        NSArray *storiesArray = storiesDictionary[@"stories"];
         [context performBlock:^{
+            NSError *saveError = nil;
             [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:context];
-            [context save:NULL];
+            [context save:&saveError];
+            if (saveError) {
+                [subscriber sendError:saveError];
+            } else {
+                [subscriber sendCompleted];
+            }
         }];
-    } error:^(NSError *error) {
-#warning Handle error
-        // Handle error
+        return nil;
     }];
 }
 
-- (void)fetchStoriesBeforCertainDate:(NSString *)dateString intoManagedObjectContext:(NSManagedObjectContext *)context {
-    [[self fetchStoriesBeforCertainDate:dateString] subscribeNext:^(NSDictionary *jsonDictionary) {
-        NSString *dateString = jsonDictionary[@"date"];
-        NSArray *storiesArray = jsonDictionary[@"stories"];
-        [context performBlock:^{
-            [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:context];
-            [context save:NULL];
-        }];
-    } error:^(NSError *error) {
-#warning Handle error
-        // Handle error
+- (RACSignal *)fetchLatestStories {
+    NSString *urlString = @"http://news-at.zhihu.com/api/3/news/latest";
+    NSURL *url = [NSURL URLWithString:urlString];
+    return [self fetchJSONFromURL:url];
+}
+
+#pragma mark - Fetch&Save Stories Before a Date
+
+- (RACSignal *)fetchAndSaveStoriesBeforeCertainDate:(NSString *)dateString
+                    intoManagedObjectContext:(NSManagedObjectContext *)context {
+    return [[self fetchStoriesBeforCertainDate:dateString] flattenMap:^RACStream *(NSDictionary *jsonDictionary) {
+        return [self saveStories:jsonDictionary intoManagedObjectContext:context];
     }];
 }
 
-- (void)fetchThemesIntoManagedObjectContext:(NSManagedObjectContext *)context {
-    [[self fetchThemes] subscribeNext:^(NSDictionary *jsonDictionary) {
-        [context performBlock:^{
-            [Theme loadThemesWithThemesArray:jsonDictionary[@"others"] intoManagedObjectContext:context];
-            [context save:NULL];
+- (RACSignal *)fetchStoriesBeforCertainDate:(NSString *)dateString {
+    if (![self.appDelegate isValidDateString:dateString]) {
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey:NSLocalizedString(@"not a valid date string", nil)};
+            NSError *notValidDateStringError = [NSError errorWithDomain:FZDErrorDomain code:FZDInvalidDateString userInfo:userInfo];
+            [subscriber sendError:notValidDateStringError];
+            return nil;
         }];
-    } error:^(NSError *error) {
-#warning Handle error
-        // Handle error
+    } else {
+        NSString *urlString = [NSString stringWithFormat:@"http://news.at.zhihu.com/api/3/news/before/%@", dateString];
+        NSURL *url = [NSURL URLWithString:urlString];
+        return [self fetchJSONFromURL:url];
+    }
+    return nil;
+}
+
+#pragma mark - Fetch&Save Themes List
+- (RACSignal *)fetchAndSaveThemesIntoManagedObjectContext:(NSManagedObjectContext *)context {
+    return [[self fetchThemes] flattenMap:^RACStream *(NSDictionary *jsonDictionary) {
+        return [self saveThemesList:jsonDictionary intoManagedObjectContext:context];
     }];
 }
 
-- (void)fetchThemeStoriesWithThemeID:(NSUInteger)id intoManagedObjectContext:(NSManagedObjectContext *)context {
-    [[self fetchStoriesOfCertainTheme:id] subscribeNext:^(NSDictionary *jsonDictionary) {
+- (RACSignal *)saveThemesList:(NSDictionary *)themesDictionary
+     intoManagedObjectContext:(NSManagedObjectContext *)context {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSArray *themeArray = themesDictionary[@"others"];
         [context performBlock:^{
-            [ThemeStory loadThemeStoriesFromArray:jsonDictionary[@"stories"] withThemeID:id intoManagedObjectContext:context];
-            [context save:NULL];
+            [Theme loadThemesWithThemesArray:themeArray intoManagedObjectContext:context];
+            NSError *saveError = nil;
+            [context save:&saveError];
+            if (saveError) {
+                [subscriber sendError:saveError];
+            } else {
+                [subscriber sendCompleted];
+            }
         }];
-    } error:^(NSError *error) {
-#warning Handle error
-        // Handle error
+        return nil;
     }];
+}
+
+- (RACSignal *)fetchThemes {
+    NSString *urlString = @"http://news-at.zhihu.com/api/3/themes";
+    NSURL *url = [NSURL URLWithString:urlString];
+    return [self fetchJSONFromURL:url];
+}
+
+#pragma mark - Fetch&Save Theme Stories
+- (RACSignal *)fetchAndSaveThemeStoriesWithThemeID:(NSUInteger)themeID
+                           intoMangedObjectContext:(NSManagedObjectContext *)context {
+    return [[self fetchStoriesOfCertainTheme:themeID] flattenMap:^RACStream *(NSDictionary *jsonDictionary) {
+        return [self saveCertainThemeStories:jsonDictionary withThemeID:themeID intoManagedObjectContext:context];
+    }];
+}
+
+- (RACSignal *)saveCertainThemeStories:(NSDictionary *)themeStoriesDictionary
+                           withThemeID:(NSUInteger)themeID
+              intoManagedObjectContext:(NSManagedObjectContext *)context {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSArray *themeStoriesArray = themeStoriesDictionary[@"stories"];
+        [context performBlock:^{
+            [ThemeStory loadThemeStoriesFromArray:themeStoriesArray withThemeID:themeID intoManagedObjectContext:context];
+            NSError *saveError = nil;
+            [context save:&saveError];
+            if (saveError) {
+                [subscriber sendError:saveError];
+            } else {
+                [subscriber sendCompleted];
+            }
+            
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)fetchStoriesOfCertainTheme:(NSUInteger)themeID {
+    NSString *urlString = [NSString stringWithFormat:@"http://news-at.zhihu.com/api/3/theme/%lu", themeID];
+    NSURL *url = [NSURL URLWithString:urlString];
+    return [self fetchJSONFromURL:url];
 }
 
 - (RACSignal *)fetchJSONFromURL:(NSURL *)url {
-    NSLog(@"Fetching: %@",url.absoluteString);
+    //NSLog(@"Fetching: %@",url.absoluteString);
     
     return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -111,40 +182,6 @@
     }] doError:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-}
-
-- (RACSignal *)fetchLatestStories {
-    NSString *urlString = @"http://news-at.zhihu.com/api/3/news/latest";
-    NSURL *url = [NSURL URLWithString:urlString];
-    return [self fetchJSONFromURL:url];
-}
-
-- (RACSignal *)fetchStoriesBeforCertainDate:(NSString *)dateString {
-    if (![self.appDelegate isValidDateString:dateString]) {
-        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-#warning Create a NSError, then send it to subscriber
-            NSError *notValidDateStringError = nil;
-            [subscriber sendError:notValidDateStringError];
-            return nil;
-        }];
-    } else {
-        NSString *urlString = [NSString stringWithFormat:@"http://news.at.zhihu.com/api/3/news/before/%@", dateString];
-        NSURL *url = [NSURL URLWithString:urlString];
-        return [self fetchJSONFromURL:url];
-    }
-    return nil;
-}
-
-- (RACSignal *)fetchThemes {
-    NSString *urlString = @"http://news-at.zhihu.com/api/3/themes";
-    NSURL *url = [NSURL URLWithString:urlString];
-    return [self fetchJSONFromURL:url];
-}
-
-- (RACSignal *)fetchStoriesOfCertainTheme:(NSUInteger)themeID {
-    NSString *urlString = [NSString stringWithFormat:@"http://news-at.zhihu.com/api/3/theme/%lu", themeID];
-    NSURL *url = [NSURL URLWithString:urlString];
-    return [self fetchJSONFromURL:url];
 }
 
 @end

@@ -101,7 +101,7 @@
         //[self.view addConstraint:heightOfContentViewConstraint];
         //self.scrollView.contentSize = self.contentView.frame.size;
     } error:^(NSError *error) {
-        //Handle Error
+        NSLog(@"error : %@ in %s", error.localizedDescription, __FUNCTION__);
     }];
 }
 

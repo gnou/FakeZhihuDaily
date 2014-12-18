@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C2144071A39A72200757A36 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C2144061A39A72200757A36 /* Localizable.strings */; };
+		4C5E0E441A42DB3D00E7934F /* ThemeBodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E0E431A42DB3D00E7934F /* ThemeBodyViewController.m */; };
 		4C813F171A3D8BE60033D81C /* Theme+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C813F161A3D8BE60033D81C /* Theme+Create.m */; };
 		4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4D81A32EED6008A8555 /* AppDelegate+MOC.m */; };
 		4C87F4DD1A32F131008A8555 /* Story+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4DC1A32F131008A8555 /* Story+Create.m */; };
@@ -49,6 +50,9 @@
 		2BBB8199B14BBE8D0114A5B4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4C1660801A304CFE00D33092 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C2144061A39A72200757A36 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		4C5E0E411A42CC9900E7934F /* FZDError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FZDError.h; sourceTree = "<group>"; };
+		4C5E0E421A42DB3D00E7934F /* ThemeBodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeBodyViewController.h; sourceTree = "<group>"; };
+		4C5E0E431A42DB3D00E7934F /* ThemeBodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeBodyViewController.m; sourceTree = "<group>"; };
 		4C813F151A3D8BE60033D81C /* Theme+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Theme+Create.h"; sourceTree = "<group>"; };
 		4C813F161A3D8BE60033D81C /* Theme+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Theme+Create.m"; sourceTree = "<group>"; };
 		4C87F4D71A32EED6008A8555 /* AppDelegate+MOC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+MOC.h"; sourceTree = "<group>"; };
@@ -154,10 +158,12 @@
 				4CBD5DF91A3AF777001C6FC0 /* SideBarTableViewController.m */,
 				4C87F4E41A32FE64008A8555 /* MainStoriesViewController.h */,
 				4C87F4E51A32FE64008A8555 /* MainStoriesViewController.m */,
-				4C9C8F031A40114F009AE2F9 /* ThemeStoriesViewController.h */,
-				4C9C8F041A40114F009AE2F9 /* ThemeStoriesViewController.m */,
 				4C87F4E71A3306D0008A8555 /* BodyViewController.h */,
 				4C87F4E81A3306D0008A8555 /* BodyViewController.m */,
+				4C9C8F031A40114F009AE2F9 /* ThemeStoriesViewController.h */,
+				4C9C8F041A40114F009AE2F9 /* ThemeStoriesViewController.m */,
+				4C5E0E421A42DB3D00E7934F /* ThemeBodyViewController.h */,
+				4C5E0E431A42DB3D00E7934F /* ThemeBodyViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -194,6 +200,7 @@
 		4CF2D6E41A2874590080B019 /* FakeZhihuDaily */ = {
 			isa = PBXGroup;
 			children = (
+				4C5E0E411A42CC9900E7934F /* FZDError.h */,
 				4CF2D6E91A2874590080B019 /* AppDelegate.h */,
 				4CF2D6EA1A2874590080B019 /* AppDelegate.m */,
 				4C87F4D71A32EED6008A8555 /* AppDelegate+MOC.h */,
@@ -397,6 +404,7 @@
 				4CF2D71F1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld in Sources */,
 				4C9C8EF31A3FD450009AE2F9 /* ThemeStory.m in Sources */,
 				4CF2D6E81A2874590080B019 /* main.m in Sources */,
+				4C5E0E441A42DB3D00E7934F /* ThemeBodyViewController.m in Sources */,
 				4C87F4E91A3306D0008A8555 /* BodyViewController.m in Sources */,
 				4C87F4DD1A32F131008A8555 /* Story+Create.m in Sources */,
 			);

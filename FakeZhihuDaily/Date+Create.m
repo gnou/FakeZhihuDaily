@@ -21,6 +21,7 @@
         
         if (!matchArray || error || [matchArray count] > 1) {
             // Handle Error
+            NSLog(@"ERROR in %s", __FUNCTION__);
         } else if ([matchArray count]) {
             date = matchArray.firstObject;
         } else if (![matchArray count]){

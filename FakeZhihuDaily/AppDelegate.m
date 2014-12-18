@@ -23,13 +23,16 @@
     self.managedObjectContext = [self createMainQueueManagedObjectContext];
     
     [self initAppearence];
-    
-   // [self fetchThemes];
-    
-   // [self startFetchLatestStories];
+        
     NetworkClient *networkClient = [[NetworkClient alloc] init];
-    [networkClient fetchLatestStoriesIntoMangedObejctContext:self.managedObjectContext];
-    [networkClient fetchThemesIntoManagedObjectContext:self.managedObjectContext];
+    
+    [[networkClient fetchAndSaveLatestStoriesIntoManagedObjectContext:self.managedObjectContext] subscribeError:^(NSError *error) {
+        NSLog(@"ERROR : %@", error);
+    }];
+    
+    [[networkClient fetchAndSaveThemesIntoManagedObjectContext:self.managedObjectContext] subscribeError:^(NSError *error) {
+        NSLog(@"ERROR : %@", error);
+    }];
         
     return YES;
 }
@@ -55,32 +58,6 @@
 - (BOOL)isValidDateString:(NSString *)dateString {
     return dateString.integerValue > 20130520 && dateString.integerValue <= [self dateStringOfToday].integerValue;
 }
-
-
-//
-//- (NSURLSession *)downloadStorysSession {
-//    if (!_downloadStorysSession) {
-//        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"Fetch Storys"];
-//        _downloadStorysSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
-//    }
-//    return _downloadStorysSession;
-//}
-//
-//- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
-//    NSData *storyData = [NSData dataWithContentsOfURL:location];
-//    NSError *jsonError;
-//    NSDictionary *storyDictionary = [NSJSONSerialization JSONObjectWithData:storyData options:NSJSONReadingAllowFragments error:&jsonError];
-//    if (!jsonError) {
-//        NSString *dateString = storyDictionary[@"date"];
-//        NSArray *storiesArray = storyDictionary[@"stories"];
-////        NSArray *topStoriesArray = storyDictionary[@"top_stories"];
-//        [self.managedObjectContext performBlock:^{
-//            [Story loadStorysFromArray:storiesArray withDateString:dateString intoManagedObjectContext:self.managedObjectContext];
-////            [Story loadStorysFromArray:topStoriesArray withDateString:@"Top Stories" intoManagedObjectContext:self.managedObjectContext];
-//            [self.managedObjectContext save:NULL];
-//        }];
-//    }
-//}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

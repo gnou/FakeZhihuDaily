@@ -12,8 +12,12 @@
 #import <CoreData/CoreData.h>
 
 @interface NetworkClient : NSObject
-- (void)fetchLatestStoriesIntoMangedObejctContext:(NSManagedObjectContext *)context;
-- (void)fetchStoriesBeforCertainDate:(NSString *)dateString intoManagedObjectContext:(NSManagedObjectContext *)context;
-- (void)fetchThemesIntoManagedObjectContext:(NSManagedObjectContext *)context;
-- (void)fetchThemeStoriesWithThemeID:(NSUInteger)id intoManagedObjectContext:(NSManagedObjectContext *)context;
+- (RACSignal *)fetchAndSaveLatestStoriesIntoManagedObjectContext:(NSManagedObjectContext *)context;
+- (RACSignal *)fetchAndSaveStoriesBeforeCertainDate:(NSString *)dateString
+                    intoManagedObjectContext:(NSManagedObjectContext *)context;
+- (RACSignal *)fetchAndSaveThemesIntoManagedObjectContext:(NSManagedObjectContext *)context;
+- (RACSignal *)fetchAndSaveThemeStoriesWithThemeID:(NSUInteger)themeID
+                           intoMangedObjectContext:(NSManagedObjectContext *)context;
+
+- (RACSignal *)fetchJSONFromURL:(NSURL *)url;
 @end
