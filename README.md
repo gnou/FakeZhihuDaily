@@ -4,6 +4,7 @@
 1. Make sure you have CocoaPods installed
 2. `pod install`
 3. open *FakeZhihuDaily.xcworkspace*, build & run
+4. If you have any problems, feel free to contact me [Mingyu Cui](mailto:malvin.cui@gmail.com)
 
 ### Screenshot
 #### 主页
