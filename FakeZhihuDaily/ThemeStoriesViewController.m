@@ -13,7 +13,7 @@
 #import "TitleCell.h"
 #import "ThemeStory.h"
 #import <UIImageView+WebCache.h>
-#import "BodyViewController.h"
+//#import "BodyViewController.h"
 #import <TSMessage.h>
 #import "ThemeBodyViewController.h"
 

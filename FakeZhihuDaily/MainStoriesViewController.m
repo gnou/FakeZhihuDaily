@@ -11,12 +11,13 @@
 #import "Story.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
-#import "BodyViewController.h"
+//#import "BodyViewController.h"
 #import "Date.h"
 #import <ReactiveCocoa.h>
 #import <SWRevealViewController.h>
 #import "NetworkClient.h"
 #import <TSMessage.h>
+#import "ContentViewController.h"
 
 #define HEIGHT_OF_SECTION_HEADER 37.5f
 
@@ -332,12 +333,14 @@
 #pragma mark - navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([segue.identifier isEqualToString:@"Goto News Body"]) {
-        BodyViewController *bodyVC = segue.destinationViewController;
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        bodyVC.id = story.id;
-//    }
+    //    if ([segue.identifier isEqualToString:@"Goto News Body"]) {
+    //BodyViewController *bodyVC = segue.destinationViewController;
+    ContentViewController *contentVC = segue.destinationViewController;
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    Story *story = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    //bodyVC.id = story.id;
+    contentVC.id = story.id;
+    //    }
 }
 
 #pragma mark - UIScrollViewDelegate

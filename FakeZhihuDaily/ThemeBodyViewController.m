@@ -8,7 +8,7 @@
 
 #import "ThemeBodyViewController.h"
 #import "NetworkClient.h"
-#import "BodyViewController.h"
+#import "ContentViewController.h"
 #import <TSMessage.h>
 #import <ReactiveCocoa/RACEXTScope.h>
 
@@ -57,7 +57,7 @@
         return [self.networkClient fetchJSONFromURL:url];
     }] deliverOn:[RACScheduler mainThreadScheduler] ]
        map:^id(NSDictionary *jsonDictionary) {
-        BodyViewController *bodyVC = [[BodyViewController alloc] init];
+        ContentViewController *bodyVC = [[ContentViewController alloc] init];
         return [bodyVC generateWebPageFromDictionary:jsonDictionary];
     }]
     subscribeNext:^(NSString *htmlString) {
