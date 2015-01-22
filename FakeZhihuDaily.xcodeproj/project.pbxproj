@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C2144071A39A72200757A36 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C2144061A39A72200757A36 /* Localizable.strings */; };
 		4C32328D1A5BAD8200D63136 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32328C1A5BAD8200D63136 /* ContentViewController.m */; };
+		4C43BB8B1A5FA50F00371E89 /* StoriesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C43BB8A1A5FA50F00371E89 /* StoriesList.swift */; };
 		4C5E0E441A42DB3D00E7934F /* ThemeBodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E0E431A42DB3D00E7934F /* ThemeBodyViewController.m */; };
 		4C813F171A3D8BE60033D81C /* Theme+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C813F161A3D8BE60033D81C /* Theme+Create.m */; };
 		4C87F4D91A32EED6008A8555 /* AppDelegate+MOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87F4D81A32EED6008A8555 /* AppDelegate+MOC.m */; };
@@ -54,6 +55,8 @@
 		4C2144061A39A72200757A36 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		4C32328B1A5BAD8200D63136 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		4C32328C1A5BAD8200D63136 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
+		4C43BB891A5FA50F00371E89 /* FakeZhihuDaily-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FakeZhihuDaily-Bridging-Header.h"; sourceTree = "<group>"; };
+		4C43BB8A1A5FA50F00371E89 /* StoriesList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoriesList.swift; sourceTree = "<group>"; };
 		4C5E0E411A42CC9900E7934F /* FZDError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FZDError.h; sourceTree = "<group>"; };
 		4C5E0E421A42DB3D00E7934F /* ThemeBodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeBodyViewController.h; sourceTree = "<group>"; };
 		4C5E0E431A42DB3D00E7934F /* ThemeBodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeBodyViewController.m; sourceTree = "<group>"; };
@@ -165,10 +168,12 @@
 				4C87F4E51A32FE64008A8555 /* MainStoriesViewController.m */,
 				4C32328B1A5BAD8200D63136 /* ContentViewController.h */,
 				4C32328C1A5BAD8200D63136 /* ContentViewController.m */,
+				4C43BB8A1A5FA50F00371E89 /* StoriesList.swift */,
 				4C9C8F031A40114F009AE2F9 /* ThemeStoriesViewController.h */,
 				4C9C8F041A40114F009AE2F9 /* ThemeStoriesViewController.m */,
 				4C5E0E421A42DB3D00E7934F /* ThemeBodyViewController.h */,
 				4C5E0E431A42DB3D00E7934F /* ThemeBodyViewController.m */,
+				4C43BB891A5FA50F00371E89 /* FakeZhihuDaily-Bridging-Header.h */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -412,6 +417,7 @@
 				4CF59B651A37EB3400475CB7 /* Story.m in Sources */,
 				4CF59B6B1A37ED3100475CB7 /* Date.m in Sources */,
 				4CF2D71F1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld in Sources */,
+				4C43BB8B1A5FA50F00371E89 /* StoriesList.swift in Sources */,
 				4C9C8EF31A3FD450009AE2F9 /* ThemeStory.m in Sources */,
 				4CF2D6E81A2874590080B019 /* main.m in Sources */,
 				4C32328D1A5BAD8200D63136 /* ContentViewController.m in Sources */,
@@ -539,9 +545,12 @@
 			baseConfigurationReference = 0BCB7CE7308CCE271DCE5AFE /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = FakeZhihuDaily/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FakeZhihuDaily/FakeZhihuDaily-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -550,9 +559,11 @@
 			baseConfigurationReference = 2BBB8199B14BBE8D0114A5B4 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = FakeZhihuDaily/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FakeZhihuDaily/FakeZhihuDaily-Bridging-Header.h";
 			};
 			name = Release;
 		};
