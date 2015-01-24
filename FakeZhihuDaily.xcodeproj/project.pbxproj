@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		186896731A738D1D005EEDA7 /* TitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 186896721A738D1D005EEDA7 /* TitleCell.m */; };
 		4C2144071A39A72200757A36 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C2144061A39A72200757A36 /* Localizable.strings */; };
 		4C32328D1A5BAD8200D63136 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32328C1A5BAD8200D63136 /* ContentViewController.m */; };
 		4C43BB8B1A5FA50F00371E89 /* StoriesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C43BB8A1A5FA50F00371E89 /* StoriesList.swift */; };
@@ -29,7 +30,6 @@
 		4CF2D6F31A2874590080B019 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CF2D6F21A2874590080B019 /* Images.xcassets */; };
 		4CF2D6F61A2874590080B019 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF2D6F41A2874590080B019 /* LaunchScreen.xib */; };
 		4CF2D7021A2874590080B019 /* FakeZhihuDailyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D7011A2874590080B019 /* FakeZhihuDailyTests.m */; };
-		4CF2D7101A2875310080B019 /* TitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D70E1A2875310080B019 /* TitleCell.m */; };
 		4CF2D71F1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2D71D1A288B610080B019 /* FakeZhihuDaily.xcdatamodeld */; };
 		4CF59B651A37EB3400475CB7 /* Story.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF59B641A37EB3400475CB7 /* Story.m */; };
 		4CF59B681A37EC3200475CB7 /* Date+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF59B671A37EC3200475CB7 /* Date+Create.m */; };
@@ -49,6 +49,8 @@
 
 /* Begin PBXFileReference section */
 		0BCB7CE7308CCE271DCE5AFE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		186896711A738D1D005EEDA7 /* TitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleCell.h; sourceTree = "<group>"; };
+		186896721A738D1D005EEDA7 /* TitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleCell.m; sourceTree = "<group>"; };
 		277424DF40C7D10B7787200B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BBB8199B14BBE8D0114A5B4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4C1660801A304CFE00D33092 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -94,8 +96,6 @@
 		4CF2D6FB1A2874590080B019 /* FakeZhihuDailyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FakeZhihuDailyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF2D7001A2874590080B019 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CF2D7011A2874590080B019 /* FakeZhihuDailyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FakeZhihuDailyTests.m; sourceTree = "<group>"; };
-		4CF2D70D1A2875310080B019 /* TitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TitleCell.h; path = "../../Fake Zhihu Daily/Fake Zhihu Daily/TitleCell.h"; sourceTree = "<group>"; };
-		4CF2D70E1A2875310080B019 /* TitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TitleCell.m; path = "../../Fake Zhihu Daily/Fake Zhihu Daily/TitleCell.m"; sourceTree = "<group>"; };
 		4CF2D71E1A288B610080B019 /* FakeZhihuDaily.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FakeZhihuDaily.xcdatamodel; sourceTree = "<group>"; };
 		4CF59B631A37EB3400475CB7 /* Story.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Story.h; sourceTree = "<group>"; };
 		4CF59B641A37EB3400475CB7 /* Story.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Story.m; sourceTree = "<group>"; };
@@ -160,8 +160,8 @@
 		4C9C8EF81A3FD4E3009AE2F9 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4CF2D70D1A2875310080B019 /* TitleCell.h */,
-				4CF2D70E1A2875310080B019 /* TitleCell.m */,
+				186896711A738D1D005EEDA7 /* TitleCell.h */,
+				186896721A738D1D005EEDA7 /* TitleCell.m */,
 				4CBD5DF81A3AF777001C6FC0 /* SideBarTableViewController.h */,
 				4CBD5DF91A3AF777001C6FC0 /* SideBarTableViewController.m */,
 				4C87F4E41A32FE64008A8555 /* MainStoriesViewController.h */,
@@ -410,7 +410,6 @@
 				4C9C8EF61A3FD467009AE2F9 /* Theme.m in Sources */,
 				4CBD5DFA1A3AF777001C6FC0 /* SideBarTableViewController.m in Sources */,
 				4C87F4E61A32FE64008A8555 /* MainStoriesViewController.m in Sources */,
-				4CF2D7101A2875310080B019 /* TitleCell.m in Sources */,
 				4CF2D6EB1A2874590080B019 /* AppDelegate.m in Sources */,
 				4CB9CE841A5BD765001D4A3A /* ContentHeaderView.m in Sources */,
 				4C9C8F051A40114F009AE2F9 /* ThemeStoriesViewController.m in Sources */,
@@ -422,6 +421,7 @@
 				4CF2D6E81A2874590080B019 /* main.m in Sources */,
 				4C32328D1A5BAD8200D63136 /* ContentViewController.m in Sources */,
 				4C5E0E441A42DB3D00E7934F /* ThemeBodyViewController.m in Sources */,
+				186896731A738D1D005EEDA7 /* TitleCell.m in Sources */,
 				4C87F4DD1A32F131008A8555 /* Story+Create.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
